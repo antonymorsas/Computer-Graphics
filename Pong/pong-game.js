@@ -9,12 +9,21 @@ let player = null;
 let player2 = null;
 //let particles = []
 
+// Pixel font from Google Fonts (loaded in index.html).
+const PIXEL_FONT = "'Press Start 2P', monospace";
+
 // Main Functions ********************************************
 function main() {
+    // Wait for the pixel font: the menu measures its buttons with it.
+    if (document.fonts && !main.fontReady) {
+        main.fontReady = true;
+        document.fonts.load("16px 'Press Start 2P'").then(main, main);
+        return;
+    }
     //Canvas
     canvas = document.querySelector("#ballCanvas");
     ctx = canvas.getContext("2d");
-    ctx.font = "25px Helvetica";
+    ctx.font = "16px " + PIXEL_FONT;
     // Make the objects
     game = new Game();
     hud = new Hud();
@@ -306,33 +315,39 @@ class Hud {
     }
 
     draw() {
-        ctx.font = "25px Helvetica";
-        ctx.fillText(this.p1, (canvas.width / 2) - 80, 30);
-        ctx.fillText(this.p2, (canvas.width / 2) + 80, 30);
+        // Dashed net down the middle
+        ctx.fillStyle = "#3a3a3a";
+        for (let y = 8; y < canvas.height; y += 28) ctx.fillRect(canvas.width / 2 - 3, y, 6, 16);
+
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.font = "28px " + PIXEL_FONT;
+        ctx.fillText(this.p1, (canvas.width / 2) - 80, 48);
+        ctx.fillText(this.p2, (canvas.width / 2) + 80, 48);
 
         //player can  see instructions 
         if (this.instructions) {
             if(game.inGamePlayers <= 0){
                 let lt = 3-(Math.round((new Date() - game.autoStartTimeActual) / 1000))
                 ctx.fillStyle = this.instructionsColor;
-                ctx.font = "16px Helvetica";
-                ctx.fillText("Match start in " + lt, canvas.width / 2, canvas.height-90);
+                ctx.font = "12px " + PIXEL_FONT;
+                ctx.fillText("MATCH START IN " + lt, canvas.width / 2, canvas.height-90);
             }
 
             // One player in game
             if(game.inGamePlayers > 0){
                 ctx.fillStyle = this.instructionsColor;
-                ctx.font = "16px Helvetica";
-                ctx.fillText("Space key to start", canvas.width / 2, canvas.height-90);
-                ctx.fillText("W - Up", 50, canvas.height-90);
-                ctx.fillText("S - Down", 50, canvas.height-65);
+                ctx.font = "12px " + PIXEL_FONT;
+                ctx.fillText("SPACE TO SERVE", canvas.width / 2, canvas.height-90);
+                ctx.fillText("W UP", 60, canvas.height-90);
+                ctx.fillText("S DOWN", 60, canvas.height-65);
             }
             // Two player in game
             if(game.inGamePlayers > 1){
                 ctx.fillStyle = this.instructionsColor;
-                ctx.font = "16px Helvetica";
-                ctx.fillText("↑ - Up", canvas.width-50, canvas.height-90);
-                ctx.fillText("↓ - Down", canvas.width-50, canvas.height-65);
+                ctx.font = "12px " + PIXEL_FONT;
+                ctx.fillText("↑ UP", canvas.width-60, canvas.height-90);
+                ctx.fillText("↓ DOWN", canvas.width-60, canvas.height-65);
             }
         }
     }
@@ -343,12 +358,12 @@ class Menu {
         this.mainText = "PONG"
         this.activeButton = null;
         this.buttonsPos = {
-            x: (canvas.width / 2) - 85,
-            y: (canvas.height/2) -50
+            x: 0, // each button is centered below
+            y: (canvas.height/2) -40
         }
         this.margin = {
             x: 0,
-            y: 60
+            y: 56
         }
         this.buttons = [{
                 id: 0,
@@ -378,6 +393,13 @@ class Menu {
                 color: "#e0e0e0"
             }
         ]
+        // Center each button and make its hit box a bit taller than the text.
+        this.buttons.forEach(btn => {
+            btn.w = ctx.measureText(btn.text).width;
+            btn.x = (canvas.width - btn.w) / 2;
+            btn.y -= 8;
+            btn.h = 32;
+        });
     }
 
     update() {
@@ -396,7 +418,7 @@ class Menu {
         }
 
         this.buttons.forEach(btn => {
-            if(btn.id==this.activeButton) btn.color= "white"
+            if(btn.id==this.activeButton) btn.color= "#ffd23f"
             else  btn.color= "#e0e0e0"
         });
     }
@@ -404,22 +426,27 @@ class Menu {
     draw() {
         ctx.textAlign = "center";
         ctx.fillStyle = "#fff";
-        ctx.font = "70px Helvetica";
-        ctx.fillText(this.mainText, canvas.width / 2, 100);
+        ctx.font = "64px " + PIXEL_FONT;
+        ctx.fillStyle = "#ff4f9a";
+        ctx.fillText(this.mainText, canvas.width / 2 + 6, 136);
+        ctx.fillStyle = "#ffd23f";
+        ctx.fillText(this.mainText, canvas.width / 2, 130);
 
         ctx.textAlign = "left";
         ctx.textBaseline = 'top';
-        ctx.font = "100 25px Helvetica";
+        ctx.font = "16px " + PIXEL_FONT;
         this.buttons.forEach(btn => {
             ctx.fillStyle = btn.color;
-            ctx.fillText(btn.text, btn.x, btn.y);
+            // Arrow on the hovered option, like an arcade menu
+            if (btn.id == this.activeButton) ctx.fillText("▶", btn.x - 32, btn.y + 8);
+            ctx.fillText(btn.text.toUpperCase(), btn.x, btn.y + 8);
             //ctx.fillRect(btn.x, btn.y, btn.w, btn.h);
         });
         ctx.textBaseline = 'alphabetic';
 
         ctx.textAlign = "center";
-        ctx.font = "10px Helvetica";
-        ctx.fillStyle = "#e0e0e0";
-        ctx.fillText("antony999k", canvas.width / 2, canvas.height - 18);
+        ctx.font = "8px " + PIXEL_FONT;
+        ctx.fillStyle = "#898989";
+        ctx.fillText("ANTONY999K", canvas.width / 2, canvas.height - 18);
     }
 }
