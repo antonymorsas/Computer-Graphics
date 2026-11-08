@@ -15,15 +15,19 @@ let vertexShaderSource =
     "		// Return the transformed and projected vertex value\n" +
     "        gl_Position = projectionMatrix * modelViewMatrix * \n" +
     "            vec4(vertexPos, 1.0);\n" +
+    "        // Size of each vertex when drawn as gl.POINTS\n" +
+    "        gl_PointSize = 10.0;\n" +
     "    }\n";
 
 let fragmentShaderSource = 
+    "    precision mediump float;\n" +
+    "    uniform vec4 color;\n" +
     "    void main(void) {\n" +
-    "    // Return the pixel color: always output white\n" +
-    "    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n" +
+    "    // Return the pixel color: one flat color per figure\n" +
+    "    gl_FragColor = color;\n" +
     "}\n";
 
-let shaderProgram, shaderVertexPositionAttribute, shaderProjectionMatrixUniform, shaderModelViewMatrixUniform;
+let shaderProgram, shaderVertexPositionAttribute, shaderProjectionMatrixUniform, shaderModelViewMatrixUniform, shaderColorUniform;
 
 // Initializes the context for use with WebGL
 function initWebGL(canvas) 
@@ -84,6 +88,7 @@ function initShader(gl)
     // name     A domString specifying the name of the uniform variable whose location to get
     shaderProjectionMatrixUniform = gl.getUniformLocation(shaderProgram, "projectionMatrix");
     shaderModelViewMatrixUniform = gl.getUniformLocation(shaderProgram, "modelViewMatrix");
+    shaderColorUniform = gl.getUniformLocation(shaderProgram, "color");
     
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
         alert("Could not initialise shaders");
@@ -141,7 +146,9 @@ function createShader(gl, str, type)
     return shader;
 }
 
-function draw(gl, obj) 
+// color: [r, g, b, a] from 0 to 1. primtype: optional, to draw the same
+// vertices another way (gl.POINTS shows where each vertex is).
+function draw(gl, obj, color, primtype) 
 {
     // set the shader to use
     gl.useProgram(shaderProgram);
@@ -166,9 +173,10 @@ function draw(gl, obj)
     // value: A Float32Array or sequence of GLfloat values.
     gl.uniformMatrix4fv(shaderProjectionMatrixUniform, false, projectionMatrix);
     gl.uniformMatrix4fv(shaderModelViewMatrixUniform, false, modelViewMatrix);
+    gl.uniform4fv(shaderColorUniform, color || [1.0, 1.0, 1.0, 1.0]);
 
     // draw the object
-    gl.drawArrays(obj.primtype, 0, obj.nVerts);
+    gl.drawArrays(primtype === undefined ? obj.primtype : primtype, 0, obj.nVerts);
 }
 
 // Create the vertex data for a square to be drawn.

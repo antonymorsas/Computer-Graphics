@@ -1,55 +1,167 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
-<title>Figures</title>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<script src="../libs/gl-matrix/gl-matrix.js"></script>
-<script src="../libs/jquery-3.4.1/jquery-3.4.1.min.js"></script>
-<script src=figures.js></script>
-
-<script type="text/javascript">
-
-// Jquery that detects the state of rediness. Code inside the function will only run once the page DOM is ready for Javascript code to execute.
-	$(document).ready(
-			function() {
-                let canvas = document.getElementById("webglcanvas");
-                
-                let gl = initWebGL(canvas);
-                initGL(gl, canvas);
-		        initViewport(gl, canvas);
-                initShader(gl);
-
-                let square = createSquare(gl);
-                let triangle = createTriangle(gl);
-                let diamond = createDiamond(gl);
-                let pacman = createPacman(gl);
-
-                mat4.identity(modelViewMatrix);
-                mat4.translate(modelViewMatrix, modelViewMatrix, [-1.0, 0.0, -3.333]);
-                draw(gl, square);
-
-                mat4.identity(modelViewMatrix);
-                mat4.translate(modelViewMatrix, modelViewMatrix, [1, 0.0, -3.333]);
-                draw(gl, triangle);
-
-                mat4.identity(modelViewMatrix);
-                mat4.translate(modelViewMatrix, modelViewMatrix, [-1.0, -0.75, -3.333])
-                draw(gl, diamond);
-
-                mat4.identity(modelViewMatrix);
-                mat4.translate(modelViewMatrix, modelViewMatrix, [1.0, -0.75, -3.333])
-                draw(gl, pacman);
-
-			}
-	);
-</script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cuatro figuras 2D dibujadas con WebGL puro: buffers, shaders y una primitiva distinta para cada una.">
+    <meta name="theme-color" content="#07060b">
+    <title>Figuras simples · Computer Graphics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="../libs/gl-matrix/gl-matrix.js"></script>
+    <script src="figures.js"></script>
 </head>
 
-<!-- All WebGL rendering takes place in a context. This structure is provided in the HTML5 Canvas element. -->
 <body>
-    <canvas id="webglcanvas" style="border: none;" width="800px" height="600px" ></canvas>
+    <main class="page">
+        <header class="intro">
+            <p class="eyebrow">Computer Graphics · 2020</p>
+            <h1>Figuras 2D</h1>
+            <p class="lead">
+                Figuras simples: lo primero que se dibuja en WebGL puro. Cuatro figuras planas, cada una con sus
+                vértices en un buffer y una forma distinta de unirlos en triángulos.
+            </p>
+        </header>
+
+        <div class="stage">
+            <div class="cabinet">
+                <div class="screen">
+                    <!-- All WebGL rendering takes place in a context. This structure is provided in the HTML5 Canvas element. -->
+                    <canvas id="webglcanvas" width="800" height="600" aria-label="Cuadrado, triángulo, rombo y pacman dibujados con WebGL"></canvas>
+                </div>
+            </div>
+
+            <aside class="panel" aria-label="Controles">
+                <div class="group" role="group" aria-labelledby="color-label">
+                    <span id="color-label" class="label">Color</span>
+                    <div class="toggle">
+                        <button type="button" data-color="white" aria-pressed="false">Blanco</button>
+                        <button type="button" data-color="arcade" aria-pressed="true">Arcade</button>
+                    </div>
+                </div>
+
+                <div class="group" role="group" aria-labelledby="points-label">
+                    <span id="points-label" class="label">Puntos</span>
+                    <div class="toggle">
+                        <button type="button" data-points="off" aria-pressed="true">Ocultar</button>
+                        <button type="button" data-points="on" aria-pressed="false">Mostrar</button>
+                    </div>
+                    <p class="hint">Dibuja cada vértice encima de su figura.</p>
+                </div>
+
+                <dl class="stats">
+                    <div>
+                        <dt>Figuras</dt>
+                        <dd>4</dd>
+                    </div>
+                    <div>
+                        <dt>Vértices dibujados</dt>
+                        <dd>40</dd>
+                    </div>
+                </dl>
+            </aside>
+        </div>
+
+        <section class="info" aria-label="Sobre las figuras">
+            <article class="card card-yellow">
+                <h2>Las figuras</h2>
+                <ul class="figures">
+                    <li><span class="swatch swatch-cyan" aria-hidden="true"></span><strong>Cuadrado</strong> 4 vértices en tira (TRIANGLE_STRIP): dos triángulos.</li>
+                    <li><span class="swatch swatch-pink" aria-hidden="true"></span><strong>Triángulo</strong> 3 vértices sueltos (TRIANGLES).</li>
+                    <li><span class="swatch swatch-green" aria-hidden="true"></span><strong>Rombo</strong> otra tira, de 5 vértices: el último repite el primero.</li>
+                    <li><span class="swatch swatch-yellow" aria-hidden="true"></span><strong>Pacman</strong> un abanico (TRIANGLE_FAN) desde el centro, con 27 puntos del borde; los que faltan dejan la boca.</li>
+                </ul>
+            </article>
+
+            <article class="card card-cyan">
+                <h2>El truco</h2>
+                <p>
+                    La GPU solo sabe pintar triángulos. La primitiva le dice cómo leer la lista de vértices: de tres en
+                    tres, en tira (cada vértice nuevo cierra un triángulo con los dos anteriores) o en abanico (todos
+                    comparten el primero). Con "Puntos" ves los vértices tal cual están en el buffer.
+                </p>
+            </article>
+
+            <article class="card card-pink">
+                <h2>Hecho con</h2>
+                <p>
+                    WebGL sin librerías 3D: un vertex shader que proyecta cada vértice con una perspectiva de 45°, un
+                    fragment shader con un color por figura, y gl-matrix para mover cada figura a su lugar.
+                </p>
+            </article>
+        </section>
+
+        <footer class="links">
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/WebGLSimpleFigures">Repo en GitHub</a>
+            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+        </footer>
+    </main>
+
+    <script>
+        // Arcade palette as [r, g, b, a] from 0 to 1.
+        const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).concat(1);
+        const WHITE = rgb("#f4f1ea");
+        const PINK = rgb("#ff4f9a");
+
+        let gl, figures;
+        let arcade = true;
+        let points = false;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let canvas = document.getElementById("webglcanvas");
+
+            gl = initWebGL(canvas);
+            initGL(gl, canvas);
+            initViewport(gl, canvas);
+            initShader(gl);
+
+            // Each figure: its buffer, where it goes, and its arcade color.
+            figures = [
+                { obj: createSquare(gl), at: [-1.0, 0.0, -3.333], color: rgb("#3ee6ff") },
+                { obj: createTriangle(gl), at: [1.0, 0.0, -3.333], color: rgb("#ff4f9a") },
+                { obj: createDiamond(gl), at: [-1.0, -0.75, -3.333], color: rgb("#7cff6b") },
+                { obj: createPacman(gl), at: [1.0, -0.75, -3.333], color: rgb("#ffd23f") },
+            ];
+
+            document.querySelectorAll("[data-color]").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    arcade = button.dataset.color === "arcade";
+                    press("[data-color]", button);
+                    render();
+                });
+            });
+            document.querySelectorAll("[data-points]").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    points = button.dataset.points === "on";
+                    press("[data-points]", button);
+                    render();
+                });
+            });
+
+            render();
+        });
+
+        // Marks one button of a group as pressed.
+        function press(selector, active) {
+            document.querySelectorAll(selector).forEach(function (button) {
+                button.setAttribute("aria-pressed", button === active);
+            });
+        }
+
+        // The scene doesn't move, so it's drawn once per change.
+        function render() {
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            figures.forEach(function (figure) {
+                mat4.identity(modelViewMatrix);
+                mat4.translate(modelViewMatrix, modelViewMatrix, figure.at);
+                draw(gl, figure.obj, arcade ? figure.color : WHITE);
+                if (points) draw(gl, figure.obj, arcade ? WHITE : PINK, gl.POINTS);
+            });
+        }
+    </script>
 </body>
 
 </html>
-
