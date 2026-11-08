@@ -1,28 +1,33 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Cuatro figuras 2D dibujadas con WebGL puro: buffers, shaders y una primitiva distinta para cada una.">
+    <meta name="description" content="Four 2D shapes drawn with plain WebGL: buffers, shaders and a different primitive for each one.">
     <meta name="theme-color" content="#07060b">
-    <title>Figuras simples · Computer Graphics</title>
+    <title data-es="Figuras simples · Computer Graphics">Simple Shapes · Computer Graphics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="../i18n.js"></script>
     <script src="../libs/gl-matrix/gl-matrix.js"></script>
     <script src="figures.js"></script>
 </head>
 
 <body>
     <main class="page">
-        <header class="intro">
+        <div class="topbar">
             <p class="eyebrow">Computer Graphics · 2020</p>
-            <h1>Figuras 2D</h1>
-            <p class="lead">
-                Figuras simples: lo primero que se dibuja en WebGL puro. Cuatro figuras planas, cada una con sus
-                vértices en un buffer y una forma distinta de unirlos en triángulos.
+            <div data-lang-switch></div>
+        </div>
+        <header class="intro">
+            <h1 data-es="Figuras 2D">2D Shapes</h1>
+            <p class="lead"
+                data-es="Figuras simples: lo primero que se dibuja en WebGL puro. Cuatro figuras planas, cada una con sus vértices en un buffer y una forma distinta de unirlos en triángulos.">
+                Simple shapes: the first thing you draw in plain WebGL. Four flat shapes, each with its
+                vertices in a buffer and a different way of joining them into triangles.
             </p>
         </header>
 
@@ -30,73 +35,74 @@
             <div class="cabinet">
                 <div class="screen">
                     <!-- All WebGL rendering takes place in a context. This structure is provided in the HTML5 Canvas element. -->
-                    <canvas id="webglcanvas" width="800" height="600" aria-label="Cuadrado, triángulo, rombo y pacman dibujados con WebGL"></canvas>
+                    <canvas id="webglcanvas" width="800" height="600" aria-label="Square, triangle, diamond and pacman drawn with WebGL" data-es-label="Cuadrado, triángulo, rombo y pacman dibujados con WebGL"></canvas>
                 </div>
             </div>
 
-            <aside class="panel" aria-label="Controles">
+            <aside class="panel" aria-label="Controls" data-es-label="Controles">
                 <div class="group" role="group" aria-labelledby="color-label">
                     <span id="color-label" class="label">Color</span>
                     <div class="toggle">
-                        <button type="button" data-color="white" aria-pressed="false">Blanco</button>
+                        <button type="button" data-color="white" aria-pressed="false" data-es="Blanco">White</button>
                         <button type="button" data-color="arcade" aria-pressed="true">Arcade</button>
                     </div>
                 </div>
 
                 <div class="group" role="group" aria-labelledby="points-label">
-                    <span id="points-label" class="label">Puntos</span>
+                    <span id="points-label" class="label" data-es="Puntos">Points</span>
                     <div class="toggle">
-                        <button type="button" data-points="off" aria-pressed="true">Ocultar</button>
-                        <button type="button" data-points="on" aria-pressed="false">Mostrar</button>
+                        <button type="button" data-points="off" aria-pressed="true" data-es="Ocultar">Hide</button>
+                        <button type="button" data-points="on" aria-pressed="false" data-es="Mostrar">Show</button>
                     </div>
-                    <p class="hint">Dibuja cada vértice encima de su figura.</p>
+                    <p class="hint" data-es="Dibuja cada vértice encima de su figura.">Draws every vertex on top of its shape.</p>
                 </div>
 
                 <dl class="stats">
                     <div>
-                        <dt>Figuras</dt>
+                        <dt data-es="Figuras">Shapes</dt>
                         <dd>4</dd>
                     </div>
                     <div>
-                        <dt>Vértices dibujados</dt>
+                        <dt data-es="Vértices dibujados">Vertices drawn</dt>
                         <dd>40</dd>
                     </div>
                 </dl>
             </aside>
         </div>
 
-        <section class="info" aria-label="Sobre las figuras">
+        <section class="info" aria-label="About the shapes" data-es-label="Sobre las figuras">
             <article class="card card-yellow">
-                <h2>Las figuras</h2>
+                <h2 data-es="Las figuras">The shapes</h2>
                 <ul class="figures">
-                    <li><span class="swatch swatch-cyan" aria-hidden="true"></span><strong>Cuadrado</strong> 4 vértices en tira (TRIANGLE_STRIP): dos triángulos.</li>
-                    <li><span class="swatch swatch-pink" aria-hidden="true"></span><strong>Triángulo</strong> 3 vértices sueltos (TRIANGLES).</li>
-                    <li><span class="swatch swatch-green" aria-hidden="true"></span><strong>Rombo</strong> otra tira, de 5 vértices: el último repite el primero.</li>
-                    <li><span class="swatch swatch-yellow" aria-hidden="true"></span><strong>Pacman</strong> un abanico (TRIANGLE_FAN) desde el centro, con 27 puntos del borde; los que faltan dejan la boca.</li>
+                    <li data-es-html="&lt;span class=&quot;swatch swatch-cyan&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;strong&gt;Cuadrado&lt;/strong&gt; 4 vértices en tira (TRIANGLE_STRIP): dos triángulos."><span class="swatch swatch-cyan" aria-hidden="true"></span><strong>Square</strong> 4 vertices in a strip (TRIANGLE_STRIP): two triangles.</li>
+                    <li data-es-html="&lt;span class=&quot;swatch swatch-pink&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;strong&gt;Triángulo&lt;/strong&gt; 3 vértices sueltos (TRIANGLES)."><span class="swatch swatch-pink" aria-hidden="true"></span><strong>Triangle</strong> 3 separate vertices (TRIANGLES).</li>
+                    <li data-es-html="&lt;span class=&quot;swatch swatch-green&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;strong&gt;Rombo&lt;/strong&gt; otra tira, de 5 vértices: el último repite el primero."><span class="swatch swatch-green" aria-hidden="true"></span><strong>Diamond</strong> another strip, of 5 vertices: the last one repeats the first.</li>
+                    <li data-es-html="&lt;span class=&quot;swatch swatch-yellow&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;strong&gt;Pacman&lt;/strong&gt; un abanico (TRIANGLE_FAN) desde el centro, con 27 puntos del borde; los que faltan dejan la boca."><span class="swatch swatch-yellow" aria-hidden="true"></span><strong>Pacman</strong> a fan (TRIANGLE_FAN) from the center, with 27 points on the edge; the missing ones leave the mouth.</li>
                 </ul>
             </article>
 
             <article class="card card-cyan">
-                <h2>El truco</h2>
-                <p>
-                    La GPU solo sabe pintar triángulos. La primitiva le dice cómo leer la lista de vértices: de tres en
-                    tres, en tira (cada vértice nuevo cierra un triángulo con los dos anteriores) o en abanico (todos
-                    comparten el primero). Con "Puntos" ves los vértices tal cual están en el buffer.
+                <h2 data-es="El truco">The trick</h2>
+                <p data-es='La GPU solo sabe pintar triángulos. La primitiva le dice cómo leer la lista de vértices: de tres en tres, en tira (cada vértice nuevo cierra un triángulo con los dos anteriores) o en abanico (todos comparten el primero). Con "Puntos" ves los vértices tal cual están en el buffer.'>
+                    The GPU only knows how to paint triangles. The primitive tells it how to read the vertex list:
+                    three at a time, as a strip (each new vertex closes a triangle with the two before it) or as a
+                    fan (they all share the first one). With "Points" you see the vertices just as they are in the
+                    buffer.
                 </p>
             </article>
 
             <article class="card card-pink">
-                <h2>Hecho con</h2>
-                <p>
-                    WebGL sin librerías 3D: un vertex shader que proyecta cada vértice con una perspectiva de 45°, un
-                    fragment shader con un color por figura, y gl-matrix para mover cada figura a su lugar.
+                <h2 data-es="Hecho con">Made with</h2>
+                <p data-es="WebGL sin librerías 3D: un vertex shader que proyecta cada vértice con una perspectiva de 45°, un fragment shader con un color por figura, y gl-matrix para mover cada figura a su lugar.">
+                    WebGL with no 3D library: a vertex shader that projects each vertex with a 45° perspective, a
+                    fragment shader with one color per shape, and gl-matrix to move each shape into place.
                 </p>
             </article>
         </section>
 
         <footer class="links">
-            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/WebGLSimpleFigures">Repo en GitHub</a>
-            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/WebGLSimpleFigures" data-es="Repo en GitHub">Repo on GitHub</a>
+            <a href="https://antonymorsas.com/cosas" data-es-href="https://antonymorsas.com/es/cosas" data-es="Otras cosas en antonymorsas.com">More things on antonymorsas.com</a>
         </footer>
     </main>
 

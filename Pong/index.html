@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pong en canvas 2D: contra la computadora, contra otra persona en el mismo teclado, o dos bots.">
+    <meta name="description" content="Pong on a 2D canvas: against the computer, against another person on the same keyboard, or two bots.">
     <meta name="theme-color" content="#07060b">
-    <title>Pong · Computer Graphics</title>
+    <title data-es="Pong · Computer Graphics">Pong · Computer Graphics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="../i18n.js"></script>
     <script src="input.js"></script>
     <script src="helpers.js"></script>
     <script src="pong-game.js"></script>
@@ -18,59 +19,63 @@
 
 <body onload="main()">
     <main class="page">
-        <header class="intro">
+        <div class="topbar">
             <p class="eyebrow">Computer Graphics · 2020</p>
+            <div data-lang-switch></div>
+        </div>
+        <header class="intro">
             <h1>Pong</h1>
-            <p class="lead">
-                El clásico en canvas 2D. Juega contra la computadora, contra otra persona en el mismo teclado,
-                o mira a dos bots jugar entre ellos.
+            <p class="lead"
+                data-es="El clásico en canvas 2D. Juega contra la computadora, contra otra persona en el mismo teclado, o mira a dos bots jugar entre ellos.">
+                The classic on a 2D canvas. Play against the computer, against another person on the same
+                keyboard, or watch two bots play each other.
             </p>
-            <p class="press-start" aria-hidden="true">▶ Elige un modo con el mouse</p>
+            <p class="press-start" aria-hidden="true" data-es="▶ Elige un modo con el mouse">▶ Pick a mode with the mouse</p>
         </header>
 
         <div class="cabinet">
             <div class="screen">
-                <canvas id="ballCanvas" width="900" height="500" aria-label="Pong: elige un modo con el mouse">
-                    Tu navegador no soporta canvas.
+                <canvas id="ballCanvas" width="900" height="500" aria-label="Pong: pick a mode with the mouse" data-es-label="Pong: elige un modo con el mouse">
+                    Your browser doesn't support canvas.
                 </canvas>
             </div>
         </div>
-        <p class="touch-note">Se juega con teclado: ábrelo en una computadora.</p>
+        <p class="touch-note" data-es="Se juega con teclado: ábrelo en una computadora.">Played with a keyboard: open it on a computer.</p>
 
-        <section class="info" aria-label="Cómo se juega">
+        <section class="info" aria-label="How to play" data-es-label="Cómo se juega">
             <article class="card card-yellow">
-                <h2>Modos</h2>
+                <h2 data-es="Modos">Modes</h2>
                 <ul>
-                    <li><strong>Player vs NPC</strong> tú contra la computadora</li>
-                    <li><strong>Player vs Player</strong> dos personas, un teclado</li>
-                    <li><strong>NPC vs NPC</strong> dos bots; la partida empieza sola</li>
+                    <li data-es-html="&lt;strong&gt;Jugador vs NPC&lt;/strong&gt; tú contra la computadora"><strong>Player vs NPC</strong> you against the computer</li>
+                    <li data-es-html="&lt;strong&gt;Jugador vs Jugador&lt;/strong&gt; dos personas, un teclado"><strong>Player vs Player</strong> two people, one keyboard</li>
+                    <li data-es-html="&lt;strong&gt;NPC vs NPC&lt;/strong&gt; dos bots; la partida empieza sola"><strong>NPC vs NPC</strong> two bots; the match starts by itself</li>
                 </ul>
             </article>
 
             <article class="card card-cyan">
-                <h2>Controles</h2>
+                <h2 data-es="Controles">Controls</h2>
                 <dl class="keys">
                     <dt><kbd>W</kbd><kbd>S</kbd></dt>
-                    <dd>Jugador 1 (izquierda)</dd>
+                    <dd data-es="Jugador 1 (izquierda)">Player 1 (left)</dd>
                     <dt><kbd>↑</kbd><kbd>↓</kbd></dt>
-                    <dd>Jugador 2 (derecha)</dd>
-                    <dt><kbd>Espacio</kbd></dt>
-                    <dd>Sacar</dd>
+                    <dd data-es="Jugador 2 (derecha)">Player 2 (right)</dd>
+                    <dt><kbd data-es="Espacio">Space</kbd></dt>
+                    <dd data-es="Sacar">Serve</dd>
                 </dl>
             </article>
 
             <article class="card card-pink">
-                <h2>Hecho con</h2>
-                <p>
-                    JavaScript sin librerías sobre un &lt;canvas&gt;: un loop con requestAnimationFrame,
-                    colisiones que deciden el rebote según la pendiente de la pelota, y bots que la siguen.
+                <h2 data-es="Hecho con">Made with</h2>
+                <p data-es="JavaScript sin librerías sobre un &lt;canvas&gt;: un loop con requestAnimationFrame, colisiones que deciden el rebote según la pendiente de la pelota, y bots que la siguen.">
+                    JavaScript with no libraries on a &lt;canvas&gt;: a loop with requestAnimationFrame,
+                    collisions that pick the bounce from the ball's slope, and bots that follow it.
                 </p>
             </article>
         </section>
 
         <footer class="links">
-            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/Pong">Repo en GitHub</a>
-            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/Pong" data-es="Repo en GitHub">Repo on GitHub</a>
+            <a href="https://antonymorsas.com/cosas" data-es-href="https://antonymorsas.com/es/cosas" data-es="Otras cosas en antonymorsas.com">More things on antonymorsas.com</a>
         </footer>
     </main>
 

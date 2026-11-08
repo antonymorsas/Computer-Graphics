@@ -39,7 +39,9 @@ body {
 }
 
 /* Header */
-.intro {
+/* The header spans the page (the language switch sits on the right);
+   the text stays at a readable width. */
+.intro .lead {
     max-width: 700px;
 }
 
@@ -256,5 +258,35 @@ code {
 }
 
 .links a:hover {
+    color: var(--yellow);
+}
+
+/* Eyebrow on the left, EN / ES switch (from ../i18n.js) on the right. */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.lang-switch {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font: 10px/1.6 var(--pixel);
+    color: var(--muted);
+}
+
+.lang-switch a {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.lang-switch a:hover,
+.lang-switch a:focus-visible {
+    color: var(--fg);
+}
+
+.lang-switch a[aria-current] {
     color: var(--yellow);
 }

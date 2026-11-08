@@ -331,23 +331,23 @@ class Hud {
                 let lt = 3-(Math.round((new Date() - game.autoStartTimeActual) / 1000))
                 ctx.fillStyle = this.instructionsColor;
                 ctx.font = "12px " + PIXEL_FONT;
-                ctx.fillText("MATCH START IN " + lt, canvas.width / 2, canvas.height-90);
+                ctx.fillText(t("MATCH START IN ", "EMPIEZA EN ") + lt, canvas.width / 2, canvas.height-90);
             }
 
             // One player in game
             if(game.inGamePlayers > 0){
                 ctx.fillStyle = this.instructionsColor;
                 ctx.font = "12px " + PIXEL_FONT;
-                ctx.fillText("SPACE TO SERVE", canvas.width / 2, canvas.height-90);
-                ctx.fillText("W UP", 60, canvas.height-90);
-                ctx.fillText("S DOWN", 60, canvas.height-65);
+                ctx.fillText(t("SPACE TO SERVE", "ESPACIO PARA SACAR"), canvas.width / 2, canvas.height-90);
+                ctx.fillText(t("W UP", "W ARRIBA"), 60, canvas.height-90);
+                ctx.fillText(t("S DOWN", "S ABAJO"), 60, canvas.height-65);
             }
             // Two player in game
             if(game.inGamePlayers > 1){
                 ctx.fillStyle = this.instructionsColor;
                 ctx.font = "12px " + PIXEL_FONT;
-                ctx.fillText("↑ UP", canvas.width-60, canvas.height-90);
-                ctx.fillText("↓ DOWN", canvas.width-60, canvas.height-65);
+                ctx.fillText(t("↑ UP", "↑ ARRIBA"), canvas.width-60, canvas.height-90);
+                ctx.fillText(t("↓ DOWN", "↓ ABAJO"), canvas.width-60, canvas.height-65);
             }
         }
     }
@@ -367,7 +367,8 @@ class Menu {
         }
         this.buttons = [{
                 id: 0,
-                text: "Player vs NPC",
+                // Spanish without accents: the pixel font squeezes them.
+                text: t("Player vs NPC", "Jugador vs NPC"),
                 x: this.buttonsPos.x,
                 y: this.buttonsPos.y,
                 w: ctx.measureText("Player vs NPC").width,
@@ -376,7 +377,7 @@ class Menu {
             },
             {
                 id: 1,
-                text: "Player vs Player",
+                text: t("Player vs Player", "Jugador vs Jugador"),
                 x: this.buttonsPos.x + (this.margin.x * 1),
                 y: this.buttonsPos.y + (this.margin.y * 1),
                 w: ctx.measureText("Player vs Player").width,
@@ -385,7 +386,7 @@ class Menu {
             },
             {
                 id: 2,
-                text: "NPC vs NPC",
+                text: t("NPC vs NPC", "NPC vs NPC"),
                 x: this.buttonsPos.x + (this.margin.x * 2),
                 y: this.buttonsPos.y + (this.margin.y * 2),
                 w: ctx.measureText("Player vs Player").width,

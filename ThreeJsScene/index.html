@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Grafo de escena en Three.js: objetos, anillos y lunas dentro de grupos que giran y escalan juntos.">
+    <meta name="description" content="Scene graph in Three.js: objects, rings and moons inside groups that spin and scale together.">
     <meta name="theme-color" content="#07060b">
-    <title>Grafo de escena · Computer Graphics</title>
+    <title data-es="Grafo de escena · Computer Graphics">Scene graph · Computer Graphics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 
+    <script src="../i18n.js"></script>
     <script src="../libs/three.js/three.min.js"></script>
     <script src="sceneHandlers.js"></script>
     <script src="threejsscene.js"></script>
@@ -28,88 +29,96 @@
 <body>
     <main class="page">
         <header class="intro">
-            <p class="eyebrow">Computer Graphics · 2020</p>
-            <h1>Grafo</h1>
-            <p class="lead">
-                Grafo de escena en Three.js: cada objeto vive dentro de un grupo, y al girar o escalar el grupo
-                todo lo que tiene adentro se mueve con él. Agrega objetos, anillos y lunas, y arrastra para girar.
+            <div class="topbar">
+                <p class="eyebrow">Computer Graphics · 2020</p>
+                <div data-lang-switch></div>
+            </div>
+            <h1 data-es="Grafo">Graph</h1>
+            <p class="lead"
+                data-es="Grafo de escena en Three.js: cada objeto vive dentro de un grupo, y al girar o escalar el grupo todo lo que tiene adentro se mueve con él. Agrega objetos, anillos y lunas, y arrastra para girar.">
+                Scene graph in Three.js: every object lives inside a group, and when the group spins or scales,
+                everything inside moves with it. Add objects, rings and moons, and drag to spin.
             </p>
         </header>
 
         <div class="stage">
             <div class="cabinet">
                 <div class="screen">
-                    <canvas id="webglcanvas" aria-label="Escena 3D: arrastra para girarla"></canvas>
+                    <canvas id="webglcanvas" aria-label="3D scene: drag to spin it" data-es-label="Escena 3D: arrastra para girarla"></canvas>
                 </div>
             </div>
 
-            <aside class="panel" aria-label="Controles">
+            <aside class="panel" aria-label="Controls" data-es-label="Controles">
                 <div class="row">
-                    <label for="slider" class="panel-label">Escala</label>
+                    <label for="slider" class="panel-label" data-es="Escala">Scale</label>
                     <output id="scale" for="slider" class="readout">1.00x</output>
                 </div>
                 <input id="slider" type="range" min="0.1" max="2" value="1" step="0.01" class="slider">
 
                 <div class="actions">
-                    <button id="add" type="button">+ Objeto</button>
-                    <button id="addOrbit" type="button">+ Anillo</button>
-                    <button id="satelite" type="button">+ Luna</button>
-                    <button id="clear" type="button" class="danger">Borrar</button>
+                    <button id="add" type="button" data-es="+ Objeto">+ Object</button>
+                    <button id="addOrbit" type="button" data-es="+ Anillo">+ Ring</button>
+                    <button id="satelite" type="button" data-es="+ Luna">+ Moon</button>
+                    <button id="clear" type="button" class="danger" data-es="Borrar">Clear</button>
                 </div>
 
                 <dl class="stats">
                     <div>
-                        <dt>Giro</dt>
+                        <dt data-es="Giro">Spin</dt>
                         <dd id="rotation">0°</dd>
                     </div>
                     <div>
-                        <dt>Objetos</dt>
+                        <dt data-es="Objetos">Objects</dt>
                         <dd id="objects">1</dd>
                     </div>
                     <div>
-                        <dt>Anillos</dt>
+                        <dt data-es="Anillos">Rings</dt>
                         <dd id="rings">0</dd>
                     </div>
                     <div>
-                        <dt>Lunas</dt>
+                        <dt data-es="Lunas">Moons</dt>
                         <dd id="moons">0</dd>
                     </div>
                 </dl>
 
-                <p class="hint">Arrastra sobre la escena para girarla.</p>
+                <p class="hint" data-es="Arrastra sobre la escena para girarla.">Drag on the scene to spin it.</p>
             </aside>
         </div>
 
-        <section class="info" aria-label="Sobre el grafo de escena">
+        <section class="info" aria-label="About the scene graph" data-es-label="Sobre el grafo de escena">
             <article class="card card-yellow">
-                <h2>El truco</h2>
-                <p>
-                    Todo cuelga de un grupo base (un <code>Object3D</code>). Al arrastrar o escalar, solo se toca
-                    ese grupo, y los objetos, anillos y lunas que tiene adentro heredan su giro y su tamaño.
+                <h2 data-es="El truco">The trick</h2>
+                <p
+                    data-es-html="Todo cuelga de un grupo base (un &lt;code&gt;Object3D&lt;/code&gt;). Al arrastrar o escalar, solo se toca ese grupo, y los objetos, anillos y lunas que tiene adentro heredan su giro y su tamaño.">
+                    Everything hangs from a base group (an <code>Object3D</code>). Dragging or scaling only
+                    touches that group, and the objects, rings and moons inside inherit its spin and size.
                 </p>
             </article>
 
             <article class="card card-cyan">
-                <h2>Las lunas</h2>
-                <p>
-                    Cada luna vive en su propio grupo, puesto donde está el último objeto y colgado del grupo
-                    base. Ese grupo gira por su cuenta, así que la luna da vueltas alrededor de su objeto
-                    mientras todo el sistema gira.
+                <h2 data-es="Las lunas">The moons</h2>
+                <p
+                    data-es="Cada luna vive en su propio grupo, puesto donde está el último objeto y colgado del grupo base. Ese grupo gira por su cuenta, así que la luna da vueltas alrededor de su objeto mientras todo el sistema gira.">
+                    Each moon lives in its own group, placed where the last object is and hung from the base
+                    group. That group spins on its own, so the moon circles its object while the whole system
+                    spins.
                 </p>
             </article>
 
             <article class="card card-pink">
-                <h2>Hecho con</h2>
-                <p>
-                    Three.js: grupos anidados, figuras al azar (dodecaedro, icosaedro, octaedro y esfera) con
-                    material Phong, anillos con <code>RingGeometry</code> y una luz direccional más una ambiental.
+                <h2 data-es="Hecho con">Made with</h2>
+                <p
+                    data-es-html="Three.js: grupos anidados, figuras al azar (dodecaedro, icosaedro, octaedro y esfera) con material Phong, anillos con &lt;code&gt;RingGeometry&lt;/code&gt; y una luz direccional más una ambiental.">
+                    Three.js: nested groups, random shapes (dodecahedron, icosahedron, octahedron and sphere)
+                    with Phong material, rings made with <code>RingGeometry</code>, and a directional light
+                    plus an ambient one.
                 </p>
             </article>
         </section>
 
         <footer class="links">
-            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/ThreeJsScene">Repo en GitHub</a>
-            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/ThreeJsScene" data-es="Repo en GitHub">Repo on GitHub</a>
+            <a href="https://antonymorsas.com/cosas" data-es-href="https://antonymorsas.com/es/cosas" data-es="Otras cosas en antonymorsas.com">More things on antonymorsas.com</a>
         </footer>
     </main>
 </body>

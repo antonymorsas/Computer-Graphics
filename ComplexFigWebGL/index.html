@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pirámide, dodecaedro y octaedro construidos vértice por vértice en WebGL, girando.">
+    <meta name="description" content="A pyramid, a dodecahedron and an octahedron built vertex by vertex in WebGL, spinning.">
     <meta name="theme-color" content="#07060b">
-    <title>Figuras en WebGL · Computer Graphics</title>
+    <title data-es="Figuras en WebGL · Computer Graphics">WebGL Shapes · Computer Graphics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="../i18n.js"></script>
     <script src="../libs/gl-matrix/gl-matrix.js"></script>
     <script src="../libs/jquery-3.4.1/jquery-3.4.1.min.js"></script>
     <script src="figures.js"></script>
@@ -38,7 +39,7 @@
 
             function togglePause() {
                 setPaused(!paused);
-                pause.textContent = paused ? "▶ Seguir" : "■ Pausa";
+                pause.textContent = paused ? t("▶ Resume", "▶ Seguir") : t("■ Pause", "■ Pausa");
                 pause.setAttribute("aria-pressed", paused);
             }
 
@@ -61,64 +62,67 @@
 
 <body>
     <main class="page">
-        <header class="intro">
+        <div class="topbar">
             <p class="eyebrow">Computer Graphics · 2020</p>
-            <h1>Figuras</h1>
-            <p class="lead">
-                Tres sólidos armados vértice por vértice en WebGL, sin librerías 3D: una pirámide de base
-                pentagonal, un dodecaedro y un octaedro, cada uno girando sobre su propio eje.
+            <div data-lang-switch></div>
+        </div>
+        <header class="intro">
+            <h1 data-es="Figuras">Shapes</h1>
+            <p class="lead"
+                data-es="Tres sólidos armados vértice por vértice en WebGL, sin librerías 3D: una pirámide de base pentagonal, un dodecaedro y un octaedro, cada uno girando sobre su propio eje.">
+                Three solids built vertex by vertex in WebGL, with no 3D library: a pyramid with a pentagonal
+                base, a dodecahedron and an octahedron, each spinning on its own axis.
             </p>
         </header>
 
         <div class="cabinet">
             <div class="screen">
                 <canvas id="webglcanvas" width="950" height="600"
-                    aria-label="Pirámide, dodecaedro y octaedro girando"></canvas>
+                    aria-label="Pyramid, dodecahedron and octahedron spinning" data-es-label="Pirámide, dodecaedro y octaedro girando"></canvas>
             </div>
         </div>
 
-        <div class="controls" aria-label="Controles">
-            <div class="speed" role="group" aria-label="Velocidad">
-                <span class="speed-label">Velocidad</span>
+        <div class="controls" aria-label="Controls" data-es-label="Controles">
+            <div class="speed" role="group" aria-label="Speed" data-es-label="Velocidad">
+                <span class="speed-label" data-es="Velocidad">Speed</span>
                 <button type="button" data-speed="0.5" aria-pressed="false">0.5x</button>
                 <button type="button" data-speed="1" aria-pressed="true">1x</button>
                 <button type="button" data-speed="2" aria-pressed="false">2x</button>
             </div>
-            <button id="pause" type="button" class="pause" aria-pressed="false">■ Pausa</button>
-            <p class="hint"><kbd>Espacio</kbd> también pausa</p>
+            <button id="pause" type="button" class="pause" aria-pressed="false" data-es="■ Pausa">■ Pause</button>
+            <p class="hint" data-es-html="&lt;kbd&gt;Espacio&lt;/kbd&gt; también pausa"><kbd>Space</kbd> pauses too</p>
         </div>
 
-        <section class="info" aria-label="Sobre las figuras">
+        <section class="info" aria-label="About the shapes" data-es-label="Sobre las figuras">
             <article class="card card-yellow">
-                <h2>Las figuras</h2>
+                <h2 data-es="Las figuras">The shapes</h2>
                 <ul>
-                    <li><strong>Pentagonal</strong> pirámide con base de 5 lados y 5 caras triangulares que suben a la punta.</li>
-                    <li><strong>Dodecaedro</strong> 12 caras pentagonales; sus 20 vértices salen de la proporción
-                        áurea.</li>
-                    <li><strong>Octaedro</strong> 8 caras triangulares; además de girar, sube y baja.</li>
+                    <li data-es-html="&lt;strong&gt;Pentagonal&lt;/strong&gt; pirámide con base de 5 lados y 5 caras triangulares que suben a la punta."><strong>Pentagonal</strong> a pyramid with a 5-sided base and 5 triangular faces rising to the tip.</li>
+                    <li data-es-html="&lt;strong&gt;Dodecaedro&lt;/strong&gt; 12 caras pentagonales; sus 20 vértices salen de la proporción áurea."><strong>Dodecahedron</strong> 12 pentagonal faces; its 20 vertices come from the golden ratio.</li>
+                    <li data-es-html="&lt;strong&gt;Octaedro&lt;/strong&gt; 8 caras triangulares; además de girar, sube y baja."><strong>Octahedron</strong> 8 triangular faces; besides spinning, it bobs up and down.</li>
                 </ul>
             </article>
 
             <article class="card card-cyan">
-                <h2>A mano</h2>
-                <p>
-                    Cada figura es una lista de vértices, un color por cara y una lista de índices que dice qué
-                    vértices forman cada triángulo. Los pentágonos se parten en tres triángulos.
+                <h2 data-es="A mano">By hand</h2>
+                <p data-es="Cada figura es una lista de vértices, un color por cara y una lista de índices que dice qué vértices forman cada triángulo. Los pentágonos se parten en tres triángulos.">
+                    Each shape is a list of vertices, one color per face and a list of indices saying which
+                    vertices make each triangle. Pentagons are split into three triangles.
                 </p>
             </article>
 
             <article class="card card-pink">
-                <h2>Hecho con</h2>
-                <p>
-                    WebGL puro con shaders propios y gl-matrix para las matrices: una proyección en perspectiva
-                    de 45° y una rotación por figura en cada frame. A 1x dan una vuelta cada 5 segundos.
+                <h2 data-es="Hecho con">Made with</h2>
+                <p data-es="WebGL puro con shaders propios y gl-matrix para las matrices: una proyección en perspectiva de 45° y una rotación por figura en cada frame. A 1x dan una vuelta cada 5 segundos.">
+                    Plain WebGL with hand-written shaders and gl-matrix for the matrices: a 45° perspective
+                    projection and one rotation per shape every frame. At 1x they turn once every 5 seconds.
                 </p>
             </article>
         </section>
 
         <footer class="links">
-            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/ComplexFigWebGL">Repo en GitHub</a>
-            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/ComplexFigWebGL" data-es="Repo en GitHub">Repo on GitHub</a>
+            <a href="https://antonymorsas.com/cosas" data-es-href="https://antonymorsas.com/es/cosas" data-es="Otras cosas en antonymorsas.com">More things on antonymorsas.com</a>
         </footer>
     </main>
 </body>

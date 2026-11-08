@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pirámide de Sierpinski en WebGL: tres caras fractales girando; sube el nivel y mira cómo se dividen.">
+    <meta name="description" content="Sierpinski pyramid in WebGL: three spinning fractal faces; raise the level and watch them split.">
     <meta name="theme-color" content="#07060b">
-    <title>Pirámide de Sierpinski · Computer Graphics</title>
+    <title data-es="Pirámide de Sierpinski · Computer Graphics">Sierpinski Pyramid · Computer Graphics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="../i18n.js"></script>
     <script src="../libs/gl-matrix/gl-matrix.js"></script>
     <script src="pyramid.js"></script>
 </head>
@@ -18,11 +19,15 @@
 <body onload="main()">
     <main class="page">
         <header class="intro">
-            <p class="eyebrow">Computer Graphics · 2020</p>
+            <div class="topbar">
+                <p class="eyebrow">Computer Graphics · 2020</p>
+                <div data-lang-switch></div>
+            </div>
             <h1>Sierpinski 3D</h1>
-            <p class="lead">
-                Pirámide de Sierpinski: el mismo fractal del triángulo, ahora en tres caras que giran en WebGL.
-                Sube el nivel y mira cómo se dividen.
+            <p class="lead"
+                data-es="Pirámide de Sierpinski: el mismo fractal del triángulo, ahora en tres caras que giran en WebGL. Sube el nivel y mira cómo se dividen.">
+                Sierpinski pyramid: the same fractal as the triangle, now on three faces spinning in WebGL.
+                Raise the level and watch them split.
             </p>
         </header>
 
@@ -30,69 +35,73 @@
             <div class="cabinet">
                 <div class="screen">
                     <canvas id="pyramidCanvas" width="800" height="640"
-                        aria-label="Pirámide de Sierpinski girando"></canvas>
+                        aria-label="Spinning Sierpinski pyramid" data-es-label="Pirámide de Sierpinski girando"></canvas>
                 </div>
             </div>
 
-            <aside class="panel" aria-label="Controles">
+            <aside class="panel" aria-label="Controls" data-es-label="Controles">
                 <div class="level">
-                    <span class="level-label" id="level-label">Nivel</span>
+                    <span class="level-label" id="level-label" data-es="Nivel">Level</span>
                     <output id="levelValue" class="level-value" aria-labelledby="level-label">3</output>
                 </div>
 
                 <div class="stepper">
-                    <button id="minus" type="button" aria-label="Bajar un nivel">−</button>
+                    <button id="minus" type="button" aria-label="Level down" data-es-label="Bajar un nivel">−</button>
                     <div class="pips" aria-hidden="true"></div>
-                    <button id="plus" type="button" aria-label="Subir un nivel">+</button>
+                    <button id="plus" type="button" aria-label="Level up" data-es-label="Subir un nivel">+</button>
                 </div>
 
-                <button id="pause" type="button" class="pause" aria-pressed="false">■ Pausa</button>
+                <button id="pause" type="button" class="pause" aria-pressed="false" data-es="■ Pausa">■ Pause</button>
 
                 <dl class="stats">
                     <div>
-                        <dt>Triángulos</dt>
+                        <dt data-es="Triángulos">Triangles</dt>
                         <dd id="triangles">81</dd>
                     </div>
                     <div>
-                        <dt>Caras</dt>
+                        <dt data-es="Caras">Faces</dt>
                         <dd>3</dd>
                     </div>
                 </dl>
 
-                <p class="hint"><kbd>←</kbd><kbd>→</kbd> nivel<br><kbd>Espacio</kbd> pausa</p>
+                <p class="hint" data-es-html="&lt;kbd&gt;←&lt;/kbd&gt;&lt;kbd&gt;→&lt;/kbd&gt; nivel&lt;br&gt;&lt;kbd&gt;Espacio&lt;/kbd&gt; pausa"><kbd>←</kbd><kbd>→</kbd> level<br><kbd>Space</kbd> pause</p>
             </aside>
         </div>
 
-        <section class="info" aria-label="Sobre la pirámide">
+        <section class="info" aria-label="About the pyramid" data-es-label="Sobre la pirámide">
             <article class="card card-yellow">
-                <h2>El truco</h2>
-                <p>
-                    Cada cara es un triángulo de Sierpinski: une los puntos medios, quédate con las tres esquinas
-                    y repite. Luego la misma cara se copia tres veces, girada 120° una de otra alrededor del eje
-                    vertical.
+                <h2 data-es="El truco">The trick</h2>
+                <p
+                    data-es="Cada cara es un triángulo de Sierpinski: une los puntos medios, quédate con las tres esquinas y repite. Luego la misma cara se copia tres veces, girada 120° una de otra alrededor del eje vertical.">
+                    Each face is a Sierpinski triangle: join the midpoints, keep the three corners and repeat.
+                    Then the same face is copied three times, each turned 120° from the next around the vertical
+                    axis.
                 </p>
             </article>
 
             <article class="card card-cyan">
-                <h2>La cuenta</h2>
-                <p>
-                    Cada nivel triplica los triángulos de cada cara (3<sup>n</sup>). Con las tres caras, el nivel 3
-                    dibuja 81 triángulos y el nivel 6 ya son 2,187.
+                <h2 data-es="La cuenta">The math</h2>
+                <p
+                    data-es-html="Cada nivel triplica los triángulos de cada cara (3&lt;sup&gt;n&lt;/sup&gt;). Con las tres caras, el nivel 3 dibuja 81 triángulos y el nivel 6 ya son 2,187.">
+                    Each level triples the triangles on each face (3<sup>n</sup>). With three faces, level 3
+                    draws 81 triangles and level 6 is already 2,187.
                 </p>
             </article>
 
             <article class="card card-pink">
-                <h2>Hecho con</h2>
-                <p>
-                    WebGL puro con shaders propios y gl-matrix: la recursión arma los vértices, un color al azar
-                    de la paleta por triángulo y una rotación por frame. Da una vuelta cada 10 segundos.
+                <h2 data-es="Hecho con">Made with</h2>
+                <p
+                    data-es="WebGL puro con shaders propios y gl-matrix: la recursión arma los vértices, un color al azar de la paleta por triángulo y una rotación por frame. Da una vuelta cada 10 segundos.">
+                    Plain WebGL with its own shaders and gl-matrix: recursion builds the vertices, each triangle
+                    gets a random color from the palette, and it rotates a bit every frame. One full turn every
+                    10 seconds.
                 </p>
             </article>
         </section>
 
         <footer class="links">
-            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/SierpinskyPyramid">Repo en GitHub</a>
-            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/SierpinskyPyramid" data-es="Repo en GitHub">Repo on GitHub</a>
+            <a href="https://antonymorsas.com/cosas" data-es-href="https://antonymorsas.com/es/cosas" data-es="Otras cosas en antonymorsas.com">More things on antonymorsas.com</a>
         </footer>
     </main>
 
@@ -108,7 +117,7 @@
 
             function show() {
                 document.getElementById("levelValue").textContent = level;
-                document.getElementById("triangles").textContent = triangleCount().toLocaleString("es-MX");
+                document.getElementById("triangles").textContent = triangleCount().toLocaleString(LANG === "es" ? "es-MX" : "en-US");
                 minus.disabled = level == MIN_LEVEL;
                 plus.disabled = level == MAX_LEVEL;
                 pips.querySelectorAll("span").forEach(function (pip, i) {
@@ -123,7 +132,7 @@
 
             function togglePause() {
                 setPaused(!paused);
-                pause.textContent = paused ? "▶ Seguir" : "■ Pausa";
+                pause.textContent = paused ? t("▶ Resume", "▶ Seguir") : t("■ Pause", "■ Pausa");
                 pause.setAttribute("aria-pressed", paused);
             }
 

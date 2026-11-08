@@ -21,7 +21,7 @@ function setLevel(n){
     level = Math.max(0, Math.min(MAX_LEVEL, n));
     document.getElementById("slider").value = level;
     document.getElementById("sliderValue").textContent = level;
-    document.getElementById("triangles").textContent = Math.pow(3, level).toLocaleString("es-MX");
+    document.getElementById("triangles").textContent = Math.pow(3, level).toLocaleString(LANG === "es" ? "es-MX" : "en-US");
     document.getElementById("area").textContent = formatPercent(Math.pow(3 / 4, level) * 100);
     document.getElementById("minus").disabled = level == 0;
     document.getElementById("plus").disabled = level == MAX_LEVEL;
@@ -101,6 +101,6 @@ function stopAuto(){
 
 function setAutoButton(on){
     let button = document.getElementById("auto");
-    button.textContent = on ? "■ Parar" : "▶ Auto";
+    button.textContent = on ? t("■ Stop", "■ Parar") : "▶ Auto";
     button.setAttribute("aria-pressed", on);
 }

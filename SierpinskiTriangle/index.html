@@ -1,96 +1,102 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="El triángulo de Sierpinski dibujado con recursión en canvas: sube el nivel y mira cómo se divide.">
+    <meta name="description" content="The Sierpinski triangle drawn with recursion on a canvas: raise the level and watch it split.">
     <meta name="theme-color" content="#07060b">
-    <title>Triángulo de Sierpinski · Computer Graphics</title>
+    <title data-es="Triángulo de Sierpinski · Computer Graphics">Sierpinski Triangle · Computer Graphics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="../i18n.js"></script>
     <script src="triangulo.js"></script>
 </head>
 
 <body onload="main()">
     <main class="page">
-        <header class="intro">
+        <div class="topbar">
             <p class="eyebrow">Computer Graphics · 2020</p>
+            <div data-lang-switch></div>
+        </div>
+        <header class="intro">
             <h1>Sierpinski</h1>
-            <p class="lead">
-                Triángulo de Sierpinski: un triángulo que se parte en tres triángulos, que se parten en tres
-                triángulos, que se parten en tres… Sube el nivel y míralo dividirse.
+            <p class="lead"
+                data-es="Triángulo de Sierpinski: un triángulo que se parte en tres triángulos, que se parten en tres triángulos, que se parten en tres… Sube el nivel y míralo dividirse.">
+                The Sierpinski triangle: a triangle that splits into three triangles, which split into three
+                triangles, which split into three… Raise the level and watch it divide.
             </p>
         </header>
 
         <div class="stage">
             <div class="cabinet">
                 <div class="screen">
-                    <canvas id="trianC" width="500" height="500" aria-label="Triángulo de Sierpinski"></canvas>
+                    <canvas id="trianC" width="500" height="500" aria-label="Sierpinski triangle" data-es-label="Triángulo de Sierpinski"></canvas>
                 </div>
             </div>
 
-            <aside class="panel" aria-label="Controles">
+            <aside class="panel" aria-label="Controls" data-es-label="Controles">
                 <div class="level">
-                    <label for="slider" class="level-label">Nivel</label>
+                    <label for="slider" class="level-label" data-es="Nivel">Level</label>
                     <output id="sliderValue" for="slider" class="level-value">0</output>
                 </div>
 
                 <div class="stepper">
-                    <button id="minus" type="button" aria-label="Bajar un nivel">−</button>
+                    <button id="minus" type="button" aria-label="Level down" data-es-label="Bajar un nivel">−</button>
                     <input id="slider" type="range" min="0" max="8" value="0" step="1" class="slider">
-                    <button id="plus" type="button" aria-label="Subir un nivel">+</button>
+                    <button id="plus" type="button" aria-label="Level up" data-es-label="Subir un nivel">+</button>
                 </div>
 
                 <button id="auto" type="button" class="auto" aria-pressed="false">▶ Auto</button>
 
                 <dl class="stats">
                     <div>
-                        <dt>Triángulos</dt>
+                        <dt data-es="Triángulos">Triangles</dt>
                         <dd id="triangles">1</dd>
                     </div>
                     <div>
-                        <dt>Área que queda</dt>
+                        <dt data-es="Área que queda">Area left</dt>
                         <dd id="area">100%</dd>
                     </div>
                 </dl>
 
-                <p class="hint"><kbd>←</kbd><kbd>→</kbd> también cambian el nivel</p>
+                <p class="hint" data-es-html="&lt;kbd&gt;←&lt;/kbd&gt;&lt;kbd&gt;→&lt;/kbd&gt; también cambian el nivel"><kbd>←</kbd><kbd>→</kbd> change the level too</p>
             </aside>
         </div>
 
-        <section class="info" aria-label="Sobre el fractal">
+        <section class="info" aria-label="About the fractal" data-es-label="Sobre el fractal">
             <article class="card card-yellow">
-                <h2>El truco</h2>
-                <p>
-                    Une los puntos medios de los lados y te quedan tres triángulos en las esquinas y un hueco en
-                    medio. Repite lo mismo con cada uno. El código es una función que se llama a sí misma tres
-                    veces hasta llegar al nivel 0, y ahí pinta.
+                <h2 data-es="El truco">The trick</h2>
+                <p data-es="Une los puntos medios de los lados y te quedan tres triángulos en las esquinas y un hueco en medio. Repite lo mismo con cada uno. El código es una función que se llama a sí misma tres veces hasta llegar al nivel 0, y ahí pinta.">
+                    Join the midpoints of the sides and you get three triangles in the corners and a hole in
+                    the middle. Do the same with each one. The code is a function that calls itself three
+                    times until it reaches level 0, and paints there.
                 </p>
             </article>
 
             <article class="card card-cyan">
-                <h2>La cuenta</h2>
-                <p>
-                    Cada nivel triplica los triángulos (3<sup>n</sup>) y se queda con 3/4 del área. En el nivel 8
-                    ya son 6,561 triángulos y queda el 10% del área: si siguieras para siempre, el área sería 0.
+                <h2 data-es="La cuenta">The math</h2>
+                <p data-es-html="Cada nivel triplica los triángulos (3&lt;sup&gt;n&lt;/sup&gt;) y se queda con 3/4 del área. En el nivel 8 ya son 6,561 triángulos y queda el 10% del área: si siguieras para siempre, el área sería 0.">
+                    Each level triples the triangles (3<sup>n</sup>) and keeps 3/4 of the area. At level 8
+                    there are already 6,561 triangles and 10% of the area is left: if you kept going forever,
+                    the area would be 0.
                 </p>
             </article>
 
             <article class="card card-pink">
-                <h2>Hecho con</h2>
-                <p>
-                    JavaScript sin librerías sobre un &lt;canvas&gt; 2D: recursión, puntos medios y un
-                    <code>fill()</code> por triángulo con un color al azar de la paleta.
+                <h2 data-es="Hecho con">Made with</h2>
+                <p data-es-html="JavaScript sin librerías sobre un &amp;lt;canvas&amp;gt; 2D: recursión, puntos medios y un &lt;code&gt;fill()&lt;/code&gt; por triángulo con un color al azar de la paleta.">
+                    JavaScript with no libraries on a 2D &lt;canvas&gt;: recursion, midpoints and one
+                    <code>fill()</code> per triangle with a random color from the palette.
                 </p>
             </article>
         </section>
 
         <footer class="links">
-            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/SierpinskiTriangle">Repo en GitHub</a>
-            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/SierpinskiTriangle" data-es="Repo en GitHub">Repo on GitHub</a>
+            <a href="https://antonymorsas.com/cosas" data-es-href="https://antonymorsas.com/es/cosas" data-es="Otras cosas en antonymorsas.com">More things on antonymorsas.com</a>
         </footer>
     </main>
 </body>

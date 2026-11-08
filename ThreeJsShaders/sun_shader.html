@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="Un sol de lava animado con un shader propio en Three.js: dos texturas que se mezclan y se mueven con el tiempo.">
+		<meta name="description" content="An animated lava sun with a custom shader in Three.js: two textures that blend and move over time.">
 		<meta name="theme-color" content="#07060b">
-		<title>Shader de lava · Computer Graphics</title>
+		<title data-es="Shader de lava · Computer Graphics">Lava shader · Computer Graphics</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
@@ -64,6 +64,7 @@
 				}
 		</script>
 
+		<script src="../i18n.js"></script>
 		<script src="../libs/three.js/three.min.js"></script>
 		<script src="sun_shader.js"></script>
 		<script>
@@ -77,25 +78,29 @@
 	<body>
 		<main class="page">
 			<header class="intro">
-				<p class="eyebrow">Computer Graphics · 2020</p>
+				<div class="topbar">
+					<p class="eyebrow">Computer Graphics · 2020</p>
+					<div data-lang-switch></div>
+				</div>
 				<h1>Lava</h1>
-				<p class="lead">
-					Un sol de lava hecho con un shader propio: dos texturas que se deforman entre sí y se mueven
-					con el tiempo, pintadas sobre una esfera en Three.js.
+				<p class="lead"
+					data-es="Un sol de lava hecho con un shader propio: dos texturas que se deforman entre sí y se mueven con el tiempo, pintadas sobre una esfera en Three.js.">
+					A lava sun made with a custom shader: two textures that warp each other and move over time,
+					painted on a sphere in Three.js.
 				</p>
 			</header>
 
 			<div class="stage">
 				<div class="cabinet">
 					<div class="screen">
-						<canvas id="webglcanvas" aria-label="Esfera de lava animada"></canvas>
+						<canvas id="webglcanvas" aria-label="Animated lava sphere" data-es-label="Esfera de lava animada"></canvas>
 					</div>
 				</div>
 
-				<aside class="panel" aria-label="Controles">
-					<p class="panel-label" id="speed-label">Velocidad</p>
+				<aside class="panel" aria-label="Controls" data-es-label="Controles">
+					<p class="panel-label" id="speed-label" data-es="Velocidad">Speed</p>
 					<div class="speeds" role="group" aria-labelledby="speed-label">
-						<button type="button" data-speed="0" aria-pressed="false">Pausa</button>
+						<button type="button" data-speed="0" aria-pressed="false" data-es="Pausa">Pause</button>
 						<button type="button" data-speed="0.5" aria-pressed="false">0.5x</button>
 						<button type="button" data-speed="1" aria-pressed="true">1x</button>
 						<button type="button" data-speed="3" aria-pressed="false">3x</button>
@@ -103,44 +108,47 @@
 
 					<dl class="stats">
 						<div>
-							<dt>Tiempo del shader</dt>
+							<dt data-es="Tiempo del shader">Shader time</dt>
 							<dd id="time">0.0</dd>
 						</div>
 					</dl>
 				</aside>
 			</div>
 
-			<section class="info" aria-label="Sobre el shader">
+			<section class="info" aria-label="About the shader" data-es-label="Sobre el shader">
 				<article class="card card-yellow">
-					<h2>El truco</h2>
-					<p>
-						La lava no se mueve en línea recta: una textura de nubes desplaza las coordenadas de la
-						textura de lava, así que se deforma como si fluyera. El tiempo empuja las dos en
-						direcciones distintas.
+					<h2 data-es="El truco">The trick</h2>
+					<p
+						data-es="La lava no se mueve en línea recta: una textura de nubes desplaza las coordenadas de la textura de lava, así que se deforma como si fluyera. El tiempo empuja las dos en direcciones distintas.">
+						The lava doesn't move in a straight line: a cloud texture shifts the lava texture's
+						coordinates, so it warps as if it were flowing. Time pushes the two in different
+						directions.
 					</p>
 				</article>
 
 				<article class="card card-cyan">
-					<h2>Los puntos calientes</h2>
-					<p>
-						La transparencia de las nubes multiplica el brillo de la lava. Donde el rojo se pasa de
-						cierto valor, el shader le baja el rojo y le sube el verde y el azul: ahí se ve más
-						amarillo, como lava más caliente.
+					<h2 data-es="Los puntos calientes">Hot spots</h2>
+					<p
+						data-es="La transparencia de las nubes multiplica el brillo de la lava. Donde el rojo se pasa de cierto valor, el shader le baja el rojo y le sube el verde y el azul: ahí se ve más amarillo, como lava más caliente.">
+						The clouds' transparency multiplies the lava's brightness. Where red goes past a certain
+						value, the shader lowers the red and raises green and blue: those spots look more
+						yellow, like hotter lava.
 					</p>
 				</article>
 
 				<article class="card card-pink">
-					<h2>Hecho con</h2>
-					<p>
-						Three.js con un <code>ShaderMaterial</code>: un vertex shader que escala las UV y un
-						fragment shader en GLSL que mezcla una textura de nubes y una de lava.
+					<h2 data-es="Hecho con">Made with</h2>
+					<p
+						data-es-html="Three.js con un &lt;code&gt;ShaderMaterial&lt;/code&gt;: un vertex shader que escala las UV y un fragment shader en GLSL que mezcla una textura de nubes y una de lava.">
+						Three.js with a <code>ShaderMaterial</code>: a vertex shader that scales the UVs and a GLSL
+						fragment shader that blends a cloud texture with a lava texture.
 					</p>
 				</article>
 			</section>
 
 			<footer class="links">
-				<a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/ThreeJsShaders">Repo en GitHub</a>
-				<a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+				<a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/ThreeJsShaders" data-es="Repo en GitHub">Repo on GitHub</a>
+				<a href="https://antonymorsas.com/cosas" data-es-href="https://antonymorsas.com/es/cosas" data-es="Otras cosas en antonymorsas.com">More things on antonymorsas.com</a>
 			</footer>
 		</main>
 	</body>
