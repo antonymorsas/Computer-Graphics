@@ -1,14 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sierpinski Pyramid</title>
-
+    <meta name="description" content="Pirámide de Sierpinski en WebGL: tres caras fractales girando; sube el nivel y mira cómo se dividen.">
+    <meta name="theme-color" content="#07060b">
+    <title>Pirámide de Sierpinski · Computer Graphics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <script src="../libs/gl-matrix/gl-matrix.js"></script>
     <script src="pyramid.js"></script>
 </head>
+
 <body onload="main()">
-    <canvas id="pyramidCanvas" width="1300" height="660" style="border: black; border-style: solid;"></canvas>
+    <main class="page">
+        <header class="intro">
+            <p class="eyebrow">Computer Graphics · 2020</p>
+            <h1>Sierpinski 3D</h1>
+            <p class="lead">
+                Pirámide de Sierpinski: el mismo fractal del triángulo, ahora en tres caras que giran en WebGL.
+                Sube el nivel y mira cómo se dividen.
+            </p>
+        </header>
+
+        <div class="stage">
+            <div class="cabinet">
+                <div class="screen">
+                    <canvas id="pyramidCanvas" width="800" height="640"
+                        aria-label="Pirámide de Sierpinski girando"></canvas>
+                </div>
+            </div>
+
+            <aside class="panel" aria-label="Controles">
+                <div class="level">
+                    <span class="level-label" id="level-label">Nivel</span>
+                    <output id="levelValue" class="level-value" aria-labelledby="level-label">3</output>
+                </div>
+
+                <div class="stepper">
+                    <button id="minus" type="button" aria-label="Bajar un nivel">−</button>
+                    <div class="pips" aria-hidden="true"></div>
+                    <button id="plus" type="button" aria-label="Subir un nivel">+</button>
+                </div>
+
+                <button id="pause" type="button" class="pause" aria-pressed="false">■ Pausa</button>
+
+                <dl class="stats">
+                    <div>
+                        <dt>Triángulos</dt>
+                        <dd id="triangles">81</dd>
+                    </div>
+                    <div>
+                        <dt>Caras</dt>
+                        <dd>3</dd>
+                    </div>
+                </dl>
+
+                <p class="hint"><kbd>←</kbd><kbd>→</kbd> nivel<br><kbd>Espacio</kbd> pausa</p>
+            </aside>
+        </div>
+
+        <section class="info" aria-label="Sobre la pirámide">
+            <article class="card card-yellow">
+                <h2>El truco</h2>
+                <p>
+                    Cada cara es un triángulo de Sierpinski: une los puntos medios, quédate con las tres esquinas
+                    y repite. Luego la misma cara se copia tres veces, girada 120° una de otra alrededor del eje
+                    vertical.
+                </p>
+            </article>
+
+            <article class="card card-cyan">
+                <h2>La cuenta</h2>
+                <p>
+                    Cada nivel triplica los triángulos de cada cara (3<sup>n</sup>). Con las tres caras, el nivel 3
+                    dibuja 81 triángulos y el nivel 6 ya son 2,187.
+                </p>
+            </article>
+
+            <article class="card card-pink">
+                <h2>Hecho con</h2>
+                <p>
+                    WebGL puro con shaders propios y gl-matrix: la recursión arma los vértices, un color al azar
+                    de la paleta por triángulo y una rotación por frame. Da una vuelta cada 10 segundos.
+                </p>
+            </article>
+        </section>
+
+        <footer class="links">
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/SierpinskyPyramid">Repo en GitHub</a>
+            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+        </footer>
+    </main>
+
+    <script>
+        // Controls: level -/+, the arrow keys, pause and the space bar.
+        window.onPyramidReady = function () {
+            let minus = document.getElementById("minus");
+            let plus = document.getElementById("plus");
+            let pause = document.getElementById("pause");
+            let pips = document.querySelector(".pips");
+
+            for (let i = MIN_LEVEL; i <= MAX_LEVEL; i++) pips.appendChild(document.createElement("span"));
+
+            function show() {
+                document.getElementById("levelValue").textContent = level;
+                document.getElementById("triangles").textContent = triangleCount().toLocaleString("es-MX");
+                minus.disabled = level == MIN_LEVEL;
+                plus.disabled = level == MAX_LEVEL;
+                pips.querySelectorAll("span").forEach(function (pip, i) {
+                    pip.classList.toggle("on", i <= level);
+                });
+            }
+
+            function step(delta) {
+                setLevel(level + delta);
+                show();
+            }
+
+            function togglePause() {
+                setPaused(!paused);
+                pause.textContent = paused ? "▶ Seguir" : "■ Pausa";
+                pause.setAttribute("aria-pressed", paused);
+            }
+
+            minus.onclick = function () { step(-1); };
+            plus.onclick = function () { step(1); };
+            pause.onclick = togglePause;
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "ArrowLeft") { event.preventDefault(); step(-1); }
+                if (event.key === "ArrowRight") { event.preventDefault(); step(1); }
+                if (event.key === " " && event.target.tagName !== "BUTTON") { event.preventDefault(); togglePause(); }
+            });
+            show();
+        };
+    </script>
 </body>
+
 </html>

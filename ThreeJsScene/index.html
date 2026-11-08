@@ -1,57 +1,117 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Three.js Scene Graph</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Grafo de escena en Three.js: objetos, anillos y lunas dentro de grupos que giran y escalan juntos.">
+    <meta name="theme-color" content="#07060b">
+    <title>Grafo de escena · Computer Graphics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 
-<link rel="stylesheet" href="../libs/jquery-ui/jquery-ui.css" />
-<link rel="stylesheet" href="../css/main.css" />
-<link rel="stylesheet" href="../css/threejsscene.css" />
-
-<script src="../libs/jquery-3.4.1/jquery-3.4.1.min.js"></script>
-<script src="../libs/jquery-ui/jquery-ui.js"></script>
-<script src="../libs/three.js/three.min.js"></script>
-
-<script src="sceneHandlers.js"></script>
-<script src="threejsscene.js"></script>
-
-<script type="text/javascript">
-       
-	$(document).ready(
-			function() {
-				$("#slider").slider({min: 0.1, max: 2, value: 1, step: 0.01, animate: false});			
-				let canvas = document.getElementById("webglcanvas");
-				// create the scene
-				createScene(canvas);
-		        // Run the run loop
-		        run();
-			}
-	);
-
-</script>
-
+    <script src="../libs/three.js/three.min.js"></script>
+    <script src="sceneHandlers.js"></script>
+    <script src="threejsscene.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // create the scene
+            createScene(document.getElementById("webglcanvas"));
+            // Run the run loop
+            run();
+        });
+    </script>
 </head>
+
 <body>
-	<div class="section">
-		<div class="controls">
-			<div id="slider"></div>
-			<div id="buttons">
-				<button id="add">Add Object</button>
-				<button id="addOrbit">Add Orbit</button>
-				<button id="satelite">Satelite</button>
-				<button id="clear">Clear</button>
-			</div>
-		</div>
-		<div id="container">
-			<canvas id="webglcanvas" width=1000 height=600></canvas>
-			<div id="prompt">
-				Drag the mouse to rotate the scene<br>Drag the slider to scale.
-			</div>
-			<div id="status">
-				<div id="rotation">rotation: 0,0,0</div>
-				<div id="scale">scale: 1</div>
-			</div>
-		</div>
-	</div>
+    <main class="page">
+        <header class="intro">
+            <p class="eyebrow">Computer Graphics · 2020</p>
+            <h1>Grafo</h1>
+            <p class="lead">
+                Grafo de escena en Three.js: cada objeto vive dentro de un grupo, y al girar o escalar el grupo
+                todo lo que tiene adentro se mueve con él. Agrega objetos, anillos y lunas, y arrastra para girar.
+            </p>
+        </header>
+
+        <div class="stage">
+            <div class="cabinet">
+                <div class="screen">
+                    <canvas id="webglcanvas" aria-label="Escena 3D: arrastra para girarla"></canvas>
+                </div>
+            </div>
+
+            <aside class="panel" aria-label="Controles">
+                <div class="row">
+                    <label for="slider" class="panel-label">Escala</label>
+                    <output id="scale" for="slider" class="readout">1.00x</output>
+                </div>
+                <input id="slider" type="range" min="0.1" max="2" value="1" step="0.01" class="slider">
+
+                <div class="actions">
+                    <button id="add" type="button">+ Objeto</button>
+                    <button id="addOrbit" type="button">+ Anillo</button>
+                    <button id="satelite" type="button">+ Luna</button>
+                    <button id="clear" type="button" class="danger">Borrar</button>
+                </div>
+
+                <dl class="stats">
+                    <div>
+                        <dt>Giro</dt>
+                        <dd id="rotation">0°</dd>
+                    </div>
+                    <div>
+                        <dt>Objetos</dt>
+                        <dd id="objects">1</dd>
+                    </div>
+                    <div>
+                        <dt>Anillos</dt>
+                        <dd id="rings">0</dd>
+                    </div>
+                    <div>
+                        <dt>Lunas</dt>
+                        <dd id="moons">0</dd>
+                    </div>
+                </dl>
+
+                <p class="hint">Arrastra sobre la escena para girarla.</p>
+            </aside>
+        </div>
+
+        <section class="info" aria-label="Sobre el grafo de escena">
+            <article class="card card-yellow">
+                <h2>El truco</h2>
+                <p>
+                    Todo cuelga de un grupo base (un <code>Object3D</code>). Al arrastrar o escalar, solo se toca
+                    ese grupo, y los objetos, anillos y lunas que tiene adentro heredan su giro y su tamaño.
+                </p>
+            </article>
+
+            <article class="card card-cyan">
+                <h2>Las lunas</h2>
+                <p>
+                    Cada luna vive en su propio grupo, puesto donde está el último objeto y colgado del grupo
+                    base. Ese grupo gira por su cuenta, así que la luna da vueltas alrededor de su objeto
+                    mientras todo el sistema gira.
+                </p>
+            </article>
+
+            <article class="card card-pink">
+                <h2>Hecho con</h2>
+                <p>
+                    Three.js: grupos anidados, figuras al azar (dodecaedro, icosaedro, octaedro y esfera) con
+                    material Phong, anillos con <code>RingGeometry</code> y una luz direccional más una ambiental.
+                </p>
+            </article>
+        </section>
+
+        <footer class="links">
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/ThreeJsScene">Repo en GitHub</a>
+            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+        </footer>
+    </main>
 </body>
 
 </html>

@@ -4,7 +4,17 @@ let projectionMatrix;
 
 let shaderProgram, shaderVertexPositionAttribute, shaderVertexColorAttribute, shaderProjectionMatrixUniform, shaderModelViewMatrixUniform;
 
-let duration = 5000; // ms
+let duration = 5000; // ms for a full turn at speed 1
+let paused = false;
+
+// Page controls: speed multiplies the turn rate; pause freezes the figures.
+function setSpeed(speed) {
+    duration = 5000 / speed;
+}
+
+function setPaused(value) {
+    paused = value;
+}
 let availableColors = [
 
 ]
@@ -554,7 +564,7 @@ function initShader(gl) {
 
 function draw(gl, objs) {
     // clear the background (with black)
-    gl.clearColor(0.1, 0.1, 0.1, 1.0);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -594,6 +604,9 @@ function run(gl, objs) {
 
     draw(gl, objs);
 
-    for (i = 0; i < objs.length; i++)
-        objs[i].update();
+    for (i = 0; i < objs.length; i++) {
+        // While paused keep the clock current, so they don't jump on resume.
+        if (paused) objs[i].currentTime = Date.now();
+        else objs[i].update();
+    }
 }

@@ -1,35 +1,126 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 
 <head>
-<title>3D Cube</title>
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<script src="../libs/gl-matrix/gl-matrix.js"></script>
-<script src="../libs/jquery-3.4.1/jquery-3.4.1.min.js"></script>
-<script src="figures.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pirámide, dodecaedro y octaedro construidos vértice por vértice en WebGL, girando.">
+    <meta name="theme-color" content="#07060b">
+    <title>Figuras en WebGL · Computer Graphics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="../libs/gl-matrix/gl-matrix.js"></script>
+    <script src="../libs/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="figures.js"></script>
 
-<script type="text/javascript">
-          
-	$(document).ready(
-			function() {
-		        let canvas = document.getElementById("webglcanvas");
-			    let gl = initWebGL(canvas);
-		        initViewport(gl, canvas);
-		        initGL(canvas);
-                let pyramid = createPiramid(gl, [-3 , 0, -2], [0.1, 1.0, 0.2]);
-				let dodecahedron = createDodecahedron(gl, [0 , 0, -2], [-0.4, 1.0, 0.1]);
-				let octahedron = createOctahedron(gl, [3 , 0, -2], [0.0, 1.0, 0.0]);
-		        initShader(gl);
-				run(gl, [pyramid, dodecahedron, octahedron]);
-			}
-	);
+    <script type="text/javascript">
+        $(document).ready(
+            function () {
+                let canvas = document.getElementById("webglcanvas");
+                let gl = initWebGL(canvas);
+                initViewport(gl, canvas);
+                initGL(canvas);
+                let pyramid = createPiramid(gl, [-3, 0, -2], [0.1, 1.0, 0.2]);
+                let dodecahedron = createDodecahedron(gl, [0, 0, -2], [-0.4, 1.0, 0.1]);
+                let octahedron = createOctahedron(gl, [3, 0, -2], [0.0, 1.0, 0.0]);
+                initShader(gl);
+                run(gl, [pyramid, dodecahedron, octahedron]);
+                controls();
+            }
+        );
 
-</script>
+        // Speed buttons, pause and the space bar.
+        function controls() {
+            let pause = document.getElementById("pause");
+            let speedButtons = document.querySelectorAll("[data-speed]");
 
+            function togglePause() {
+                setPaused(!paused);
+                pause.textContent = paused ? "▶ Seguir" : "■ Pausa";
+                pause.setAttribute("aria-pressed", paused);
+            }
+
+            pause.onclick = togglePause;
+            speedButtons.forEach(function (button) {
+                button.onclick = function () {
+                    setSpeed(Number(button.dataset.speed));
+                    speedButtons.forEach(function (b) { b.setAttribute("aria-pressed", b === button); });
+                };
+            });
+            document.addEventListener("keydown", function (event) {
+                if (event.key === " " && event.target.tagName !== "BUTTON") {
+                    event.preventDefault();
+                    togglePause();
+                }
+            });
+        }
+    </script>
 </head>
+
 <body>
+    <main class="page">
+        <header class="intro">
+            <p class="eyebrow">Computer Graphics · 2020</p>
+            <h1>Figuras</h1>
+            <p class="lead">
+                Tres sólidos armados vértice por vértice en WebGL, sin librerías 3D: una pirámide de base
+                pentagonal, un dodecaedro y un octaedro, cada uno girando sobre su propio eje.
+            </p>
+        </header>
 
-	<canvas id="webglcanvas" style="border: none;" width="950" height="600">
-	</canvas>
+        <div class="cabinet">
+            <div class="screen">
+                <canvas id="webglcanvas" width="950" height="600"
+                    aria-label="Pirámide, dodecaedro y octaedro girando"></canvas>
+            </div>
+        </div>
 
+        <div class="controls" aria-label="Controles">
+            <div class="speed" role="group" aria-label="Velocidad">
+                <span class="speed-label">Velocidad</span>
+                <button type="button" data-speed="0.5" aria-pressed="false">0.5x</button>
+                <button type="button" data-speed="1" aria-pressed="true">1x</button>
+                <button type="button" data-speed="2" aria-pressed="false">2x</button>
+            </div>
+            <button id="pause" type="button" class="pause" aria-pressed="false">■ Pausa</button>
+            <p class="hint"><kbd>Espacio</kbd> también pausa</p>
+        </div>
+
+        <section class="info" aria-label="Sobre las figuras">
+            <article class="card card-yellow">
+                <h2>Las figuras</h2>
+                <ul>
+                    <li><strong>Pentagonal</strong> pirámide con base de 5 lados y 5 caras triangulares que suben a la punta.</li>
+                    <li><strong>Dodecaedro</strong> 12 caras pentagonales; sus 20 vértices salen de la proporción
+                        áurea.</li>
+                    <li><strong>Octaedro</strong> 8 caras triangulares; además de girar, sube y baja.</li>
+                </ul>
+            </article>
+
+            <article class="card card-cyan">
+                <h2>A mano</h2>
+                <p>
+                    Cada figura es una lista de vértices, un color por cara y una lista de índices que dice qué
+                    vértices forman cada triángulo. Los pentágonos se parten en tres triángulos.
+                </p>
+            </article>
+
+            <article class="card card-pink">
+                <h2>Hecho con</h2>
+                <p>
+                    WebGL puro con shaders propios y gl-matrix para las matrices: una proyección en perspectiva
+                    de 45° y una rotación por figura en cada frame. A 1x dan una vuelta cada 5 segundos.
+                </p>
+            </article>
+        </section>
+
+        <footer class="links">
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/ComplexFigWebGL">Repo en GitHub</a>
+            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+        </footer>
+    </main>
 </body>
+
 </html>

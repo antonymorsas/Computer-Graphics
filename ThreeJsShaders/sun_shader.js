@@ -1,85 +1,100 @@
-var container;
+var camera, scene, renderer, clock;
 
-			var camera, scene, renderer, composer, clock;
+var uniforms, mesh;
 
-			var uniforms, mesh;
+// How fast the shader's time runs (the speed buttons change it).
+var speed = 1;
 
-			init();
-			animate();
+function init(canvas) {
 
-      function init(canvas) 
-      {
+	camera = new THREE.PerspectiveCamera(35, 1, 1, 3000);
+	camera.position.z = 4;
 
-				camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 3000 );
-				camera.position.z = 4;
+	scene = new THREE.Scene();
 
-				scene = new THREE.Scene();
+	clock = new THREE.Clock();
 
-				clock = new THREE.Clock();
+	var textureLoader = new THREE.TextureLoader();
 
-				var textureLoader = new THREE.TextureLoader();
+	uniforms = {
 
-				uniforms = {
+		"fogDensity": { value: 0.45 },
+		"fogColor": { value: new THREE.Vector3(0, 0, 0) },
+		"time": { value: 1.0 },
+		"uvScale": { value: new THREE.Vector2(2.0, 1) },
+		"texture1": { value: textureLoader.load('../images/cloud.png') },
+		"texture2": { value: textureLoader.load('../images/lavatile.jpg') }
 
-					"fogDensity": { value: 0.45 },
-					"fogColor": { value: new THREE.Vector3( 0, 0, 0 ) },
-					"time": { value: 1.0 },
-					"uvScale": { value: new THREE.Vector2( 2.0, 1 ) },
-					"texture1": { value: textureLoader.load( '../images/cloud.png' ) },
-					"texture2": { value: textureLoader.load( '../images/lavatile.jpg' ) }
+	};
 
-				};
+	uniforms["texture1"].value.wrapS = uniforms["texture1"].value.wrapT = THREE.RepeatWrapping;
+	uniforms["texture2"].value.wrapS = uniforms["texture2"].value.wrapT = THREE.RepeatWrapping;
 
-				uniforms[ "texture1" ].value.wrapS = uniforms[ "texture1" ].value.wrapT = THREE.RepeatWrapping;
-				uniforms[ "texture2" ].value.wrapS = uniforms[ "texture2" ].value.wrapT = THREE.RepeatWrapping;
+	var size = 0.65;
 
-				var size = 0.65;
+	var material = new THREE.ShaderMaterial({
 
-				var material = new THREE.ShaderMaterial( {
+		uniforms: uniforms,
+		vertexShader: document.getElementById('vertexShader').textContent,
+		fragmentShader: document.getElementById('fragmentShader').textContent,
+		transparent: true
+	});
 
-					uniforms: uniforms,
-					vertexShader: document.getElementById( 'vertexShader' ).textContent,
-					fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
-					transparent: true
-				} );
+	mesh = new THREE.Mesh(new THREE.SphereGeometry(size, 30, 30), material);
+	mesh.rotation.x = 0.3;
+	scene.add(mesh);
 
-				mesh = new THREE.Mesh( new THREE.SphereGeometry( size, 30, 30 ), material );
-				mesh.rotation.x = 0.3;
-				scene.add( mesh );
+	renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+	renderer.setPixelRatio(window.devicePixelRatio);
 
-				renderer = new THREE.WebGLRenderer( { canvas:canvas, antialias: true } );
-				renderer.setPixelRatio( window.devicePixelRatio );
+	onWindowResize();
 
-				onWindowResize();
+	window.addEventListener('resize', onWindowResize, false);
 
-				window.addEventListener( 'resize', onWindowResize, false );
+}
 
-			}
+// The canvas takes its size from the page (CSS); match the drawing buffer
+// and the camera to it so the sphere isn't stretched.
+function onWindowResize() {
 
-			function onWindowResize() {
+	var canvas = renderer.domElement;
+	var width = canvas.clientWidth;
+	var height = canvas.clientHeight;
 
-				camera.aspect = window.innerWidth / window.innerHeight;
-				camera.updateProjectionMatrix();
+	camera.aspect = width / height;
+	camera.updateProjectionMatrix();
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.setSize(width, height, false);
 
-			}
+}
 
-			//
+function animate() {
 
-			function animate() {
+	requestAnimationFrame(animate);
 
-				requestAnimationFrame( animate );
+	render();
 
-				render();
+}
 
-			}
+function render() {
 
-			function render() {
+	var delta = 5 * clock.getDelta();
 
-				var delta = 5 * clock.getDelta();
+	uniforms["time"].value += 0.2 * delta * speed;
 
-				uniforms[ "time" ].value += 0.2 * delta;
+	document.getElementById("time").textContent = uniforms["time"].value.toFixed(1);
 
-				renderer.render(scene, camera);
-			}
+	renderer.render(scene, camera);
+}
+
+function speedEvents() {
+	var buttons = document.querySelectorAll("[data-speed]");
+	buttons.forEach(function (button) {
+		button.addEventListener("click", function () {
+			speed = Number(button.dataset.speed);
+			buttons.forEach(function (b) {
+				b.setAttribute("aria-pressed", b === button);
+			});
+		});
+	});
+}

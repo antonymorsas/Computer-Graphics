@@ -1,0 +1,319 @@
+/* Arcade look, same family as the Pong and Sierpinski pages: pixel fonts, flat colors,
+   hard shadows (no blur). */
+:root {
+    --bg: #07060b;
+    --fg: #f4f1ea;
+    --muted: #9a958c;
+    --line: #2a2733;
+    --panel: #110f17;
+    --yellow: #ffd23f;
+    --cyan: #3ee6ff;
+    --pink: #ff4f9a;
+    --pixel: "Press Start 2P", monospace;
+    --retro: "VT323", monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    color-scheme: dark;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--retro);
+    font-size: 22px;
+    /* VT323 joins "fi" into one glyph; keep code readable. */
+    font-variant-ligatures: none;
+    line-height: 1.25;
+}
+
+.page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 16px 64px;
+}
+
+/* Header */
+.intro {
+    max-width: 700px;
+}
+
+.eyebrow {
+    margin: 0;
+    color: var(--cyan);
+    font: 10px/1.6 var(--pixel);
+    text-transform: uppercase;
+}
+
+h1 {
+    margin: 20px 0 0;
+    color: var(--yellow);
+    font: clamp(22px, 6vw, 52px)/1 var(--pixel);
+    text-transform: uppercase;
+    text-shadow: 5px 5px 0 var(--pink);
+}
+
+.lead {
+    margin: 24px 0 0;
+    color: var(--muted);
+    font-size: 24px;
+}
+
+/* Canvas + control panel */
+.stage {
+    display: grid;
+    gap: 32px;
+    margin-top: 40px;
+    align-items: start;
+}
+
+@media (min-width: 820px) {
+    .stage {
+        grid-template-columns: minmax(0, 1fr) 300px;
+    }
+}
+
+.cabinet {
+    padding: 12px;
+    background: #15131c;
+    border: 4px solid var(--fg);
+    box-shadow: 8px 8px 0 var(--cyan);
+}
+
+.screen {
+    position: relative;
+    background: #000;
+    border: 4px solid #000;
+}
+
+/* Faint CRT scanlines. */
+.screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0 2px, rgba(0, 0, 0, 0.18) 2px 4px);
+}
+
+/* The canvas keeps its 800x640 drawing buffer and scales with the same
+   aspect ratio, so the WebGL viewport is never stretched. */
+canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 800 / 640;
+    background: #000;
+}
+
+.panel {
+    padding: 20px;
+    background: var(--panel);
+    border: 4px solid var(--yellow);
+    box-shadow: 6px 6px 0 var(--line);
+}
+
+.level {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.level-label {
+    color: var(--yellow);
+    font: 12px/1.6 var(--pixel);
+    text-transform: uppercase;
+}
+
+.level-value {
+    color: var(--fg);
+    font: 48px/1 var(--pixel);
+    text-shadow: 4px 4px 0 var(--pink);
+}
+
+.stepper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* Pixel buttons: flat face, hard bottom edge that "presses" in. */
+button {
+    cursor: pointer;
+    border: 0;
+    background: var(--fg);
+    color: var(--bg);
+    font: 12px/1 var(--pixel);
+    text-transform: uppercase;
+    box-shadow: 0 4px 0 var(--muted);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+button:disabled {
+    cursor: default;
+    opacity: 0.3;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid var(--yellow);
+    outline-offset: 4px;
+}
+
+.stepper button {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+}
+
+/* Level pips: one block per level, lit up to the current one. */
+.pips {
+    display: flex;
+    flex: 1;
+    gap: 4px;
+    min-width: 0;
+}
+
+.pips span {
+    flex: 1;
+    height: 16px;
+    background: var(--line);
+}
+
+.pips span.on {
+    background: var(--cyan);
+    box-shadow: 0 4px 0 #1b8ea0;
+}
+
+.pause {
+    width: 100%;
+    margin-top: 24px;
+    padding: 14px;
+    background: var(--pink);
+    box-shadow: 0 4px 0 #a32a62;
+}
+
+.pause[aria-pressed="true"] {
+    background: var(--yellow);
+    box-shadow: 0 4px 0 #a8861f;
+}
+
+.stats {
+    display: grid;
+    gap: 16px;
+    margin: 28px 0 0;
+    padding-top: 20px;
+    border-top: 4px dashed var(--line);
+}
+
+.stats dt {
+    color: var(--muted);
+}
+
+.stats dd {
+    margin: 6px 0 0;
+    color: var(--cyan);
+    font: 18px/1.2 var(--pixel);
+}
+
+.hint {
+    margin: 24px 0 0;
+    color: var(--muted);
+    font-size: 20px;
+}
+
+kbd {
+    display: inline-block;
+    min-width: 26px;
+    margin-right: 6px;
+    padding: 5px 6px 4px;
+    background: var(--fg);
+    color: var(--bg);
+    font: 10px/1 var(--pixel);
+    text-align: center;
+    box-shadow: 0 3px 0 var(--muted);
+}
+
+/* Info cards */
+.info {
+    display: grid;
+    gap: 24px;
+    margin-top: 48px;
+}
+
+@media (min-width: 760px) {
+    .info {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.card {
+    --accent: var(--yellow);
+    padding: 20px;
+    background: var(--panel);
+    border: 4px solid var(--accent);
+    box-shadow: 6px 6px 0 var(--line);
+}
+
+.card-cyan {
+    --accent: var(--cyan);
+}
+
+.card-pink {
+    --accent: var(--pink);
+}
+
+.card h2 {
+    margin: 0 0 16px;
+    color: var(--accent);
+    font: 12px/1.6 var(--pixel);
+    text-transform: uppercase;
+}
+
+.card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.card sup {
+    line-height: 0;
+}
+
+code {
+    color: var(--fg);
+    font-family: var(--retro);
+}
+
+/* Links */
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 32px;
+    margin-top: 48px;
+}
+
+.links a {
+    color: var(--fg);
+    font: 10px/1.6 var(--pixel);
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.links a::before {
+    content: "▶ ";
+    color: var(--pink);
+}
+
+.links a:hover {
+    color: var(--yellow);
+}

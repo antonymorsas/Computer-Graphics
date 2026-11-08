@@ -10,6 +10,23 @@ let mat4 = glMatrix.mat4;
 
 let duration = 10000;
 
+// Page state: recursion level of each face, pause, and the faces being drawn.
+const MIN_LEVEL = 0;
+const MAX_LEVEL = 6;
+let level = 3;
+let paused = false;
+let glCtx = null;
+let faces = [];
+
+// Arcade palette (RGBA 0..1); each small triangle takes one at random.
+const COLORS = [
+    [1.0, 0.82, 0.25, 1], // yellow
+    [0.24, 0.9, 1.0, 1],  // cyan
+    [1.0, 0.31, 0.6, 1],  // pink
+    [0.96, 0.95, 0.92, 1], // bone
+    [0.49, 1.0, 0.42, 1], // green
+];
+
 let vertexShaderSource = `
 attribute vec3 vertexPos;
 attribute vec4 vertexColor;
@@ -115,7 +132,7 @@ function initGL(gl, canvas) {
 
 function draw(gl, objs) {
     // clear the background (with black)
-    gl.clearColor(0.1, 0.1, 0.1, 1.0);
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -151,12 +168,13 @@ function sierpinski(i,ax,ay,az,bx,by,bz,cx,cy,cz){
 }
 
 function getRandomRGBA(){
-    return [(Math.random() * 1)+0.2,(Math.random() * 1)+0.2,(Math.random() * 1)+0.2,1]
+    return COLORS[Math.floor(Math.random() * COLORS.length)];
 }
 
-function createPyramid(gl, translation, rotationAxis, type) {
+function createPyramid(gl, translation, rotationAxis, type, faceLevel) {
     let verts = [];
-    sierpinski(3,0,1,0,-1.735,-1,1,1.735,-1,1);
+    tempVerts = []; // each face gets only its own triangles
+    sierpinski(faceLevel,0,1,0,-1.735,-1,1,1.735,-1,1);
     //sierpinski(3,0,-1,-1,-1.735,-1,1,1.735,-1,1);
 
     verts.push(...tempVerts);
@@ -226,26 +244,58 @@ function createPyramid(gl, translation, rotationAxis, type) {
     return pyramid;
 }
 
-function update(glCtx, objs) {
-    requestAnimationFrame(() => update(glCtx, objs));
+function update() {
+    requestAnimationFrame(update);
 
-    draw(glCtx, objs);
-    objs.forEach(obj => obj.update())
+    draw(glCtx, faces);
+    faces.forEach(face => {
+        // While paused keep the clock current, so it doesn't jump on resume.
+        if (paused) face.currentTime = Date.now();
+        else face.update();
+    });
+}
+
+// The three side faces, each a Sierpinski triangle turned 60, 180 and 300
+// degrees around the vertical axis. (The original also built a face of type 0
+// with no rotation, which gl-matrix turned into NaN, so it was never drawn.)
+function buildFaces(faceLevel) {
+    let previous = faces;
+    faces = [1, 2, 3].map(type => createPyramid(glCtx, [0, 0, -5], [0, 0.1, 0], type, faceLevel));
+    // Keep the current turn when the level changes.
+    previous.forEach((old, i) => {
+        mat4.copy(faces[i].modelViewMatrix, old.modelViewMatrix);
+        glCtx.deleteBuffer(old.buffer);
+        glCtx.deleteBuffer(old.colorBuffer);
+        glCtx.deleteBuffer(old.indices);
+    });
+}
+
+// Page controls
+function setLevel(n) {
+    level = Math.max(MIN_LEVEL, Math.min(MAX_LEVEL, n));
+    buildFaces(level);
+    return level;
+}
+
+function setPaused(value) {
+    paused = value;
+}
+
+function triangleCount() {
+    return 3 * Math.pow(3, level);
 }
 
 function main() {
     let canvas = document.getElementById("pyramidCanvas");
-    let glCtx = initWebGL(canvas);
+    glCtx = initWebGL(canvas);
 
     initViewport(glCtx, canvas);
     initGL(glCtx, canvas);
 
-    let pyramidBot = createPyramid(glCtx, [0, 0, -5], [0, 0.1, 0],0);
-    let pyramid = createPyramid(glCtx, [0, 0, -5], [0, 0.1, 0],1);
-    let pyramid2 = createPyramid(glCtx, [0, 0, -5], [0, 0.1, 0],2);
-    let pyramid3 = createPyramid(glCtx, [0, 0, -5], [0, 0.1, 0],3);
+    buildFaces(level);
 
     initShader(glCtx, vertexShaderSource, fragmentShaderSource);
 
-    update(glCtx, [pyramidBot,pyramid,pyramid2,pyramid3]);
+    update();
+    if (window.onPyramidReady) window.onPyramidReady();
 }

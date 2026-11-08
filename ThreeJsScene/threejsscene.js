@@ -21,8 +21,9 @@ function createScene(canvas) {
         canvas: canvas,
         antialias: true
     });
-    // Set the viewport size
-    renderer.setSize(canvas.width, canvas.height);
+    // Set the viewport size: the canvas takes its size from the page (CSS),
+    // so the drawing buffer follows it (see onResize).
+    renderer.setPixelRatio(window.devicePixelRatio);
     // Create a new Three.js scene
     scene = new THREE.Scene();
     // Set the background color 
@@ -34,7 +35,7 @@ function createScene(canvas) {
      */
     // Add  a camera so we can view the scene
     //PerspectiveCamera( fov : Number, aspect : Number, near : Number, far : Number )
-    camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.5, 4000);
+    camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.5, 4000);
     camera.position.set(0, 3.75, 13);
     camera.rotation.x = -0.35;
     scene.add(camera);
@@ -84,6 +85,16 @@ function createScene(canvas) {
     // add mouse handling so we can rotate the scene
     addMouseHandler(canvas, groups[0]);
     btnEvnts();
+    onResize();
+    window.addEventListener("resize", onResize);
+}
+
+// Match the drawing buffer and the camera to the canvas' size on the page.
+function onResize() {
+    let canvas = renderer.domElement;
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
 }
 
 // Add figure to the actual group
@@ -239,4 +250,5 @@ function run() {
     renderer.render(scene, camera);
 
     animate();
+    updateStatus();
 }

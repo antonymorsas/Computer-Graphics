@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 	<head>
-		<title>three.js webgl - materials - shaders [lava]</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="../../css/main.css">
-		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="Un sol de lava animado con un shader propio en Three.js: dos texturas que se mezclan y se mueven con el tiempo.">
+		<meta name="theme-color" content="#07060b">
+		<title>Shader de lava · Computer Graphics</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="styles.css">
+
 		<script id="fragmentShader" type="x-shader/x-fragment">
 				uniform float time;
 
@@ -58,29 +63,85 @@
 					gl_Position = projectionMatrix * mvPosition;
 				}
 		</script>
-		
-		<script src="../../libs/jquery-3.4.1/jquery-3.4.1.min.js"></script>
-		<script src="../../libs/jquery-ui/jquery-ui.js"></script>
-		<script src="../../libs/three.js/three.min.js"></script>
-		<script src="sun_shader.js"></script>
-		
-		<script type="text/javascript">
-			
-				$(document).ready(
-						function() {						
-							init(document.getElementById("webglcanvas"));
-							render();
-						}
-				);
 
+		<script src="../libs/three.js/three.min.js"></script>
+		<script src="sun_shader.js"></script>
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				init(document.getElementById("webglcanvas"));
+				speedEvents();
+				animate();
+			});
 		</script>
 	</head>
 	<body>
+		<main class="page">
+			<header class="intro">
+				<p class="eyebrow">Computer Graphics · 2020</p>
+				<h1>Lava</h1>
+				<p class="lead">
+					Un sol de lava hecho con un shader propio: dos texturas que se deforman entre sí y se mueven
+					con el tiempo, pintadas sobre una esfera en Three.js.
+				</p>
+			</header>
 
-		<div id="container">
-      <canvas id="webglcanvas"></canvas>
-    </div>
+			<div class="stage">
+				<div class="cabinet">
+					<div class="screen">
+						<canvas id="webglcanvas" aria-label="Esfera de lava animada"></canvas>
+					</div>
+				</div>
 
+				<aside class="panel" aria-label="Controles">
+					<p class="panel-label" id="speed-label">Velocidad</p>
+					<div class="speeds" role="group" aria-labelledby="speed-label">
+						<button type="button" data-speed="0" aria-pressed="false">Pausa</button>
+						<button type="button" data-speed="0.5" aria-pressed="false">0.5x</button>
+						<button type="button" data-speed="1" aria-pressed="true">1x</button>
+						<button type="button" data-speed="3" aria-pressed="false">3x</button>
+					</div>
 
+					<dl class="stats">
+						<div>
+							<dt>Tiempo del shader</dt>
+							<dd id="time">0.0</dd>
+						</div>
+					</dl>
+				</aside>
+			</div>
+
+			<section class="info" aria-label="Sobre el shader">
+				<article class="card card-yellow">
+					<h2>El truco</h2>
+					<p>
+						La lava no se mueve en línea recta: una textura de nubes desplaza las coordenadas de la
+						textura de lava, así que se deforma como si fluyera. El tiempo empuja las dos en
+						direcciones distintas.
+					</p>
+				</article>
+
+				<article class="card card-cyan">
+					<h2>Los puntos calientes</h2>
+					<p>
+						La transparencia de las nubes multiplica el brillo de la lava. Donde el rojo se pasa de
+						cierto valor, el shader le baja el rojo y le sube el verde y el azul: ahí se ve más
+						amarillo, como lava más caliente.
+					</p>
+				</article>
+
+				<article class="card card-pink">
+					<h2>Hecho con</h2>
+					<p>
+						Three.js con un <code>ShaderMaterial</code>: un vertex shader que escala las UV y un
+						fragment shader en GLSL que mezcla una textura de nubes y una de lava.
+					</p>
+				</article>
+			</section>
+
+			<footer class="links">
+				<a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/ThreeJsShaders">Repo en GitHub</a>
+				<a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+			</footer>
+		</main>
 	</body>
 </html>
