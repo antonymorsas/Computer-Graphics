@@ -1,28 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="triangulo.js"></script>
+    <meta name="description" content="El triángulo de Sierpinski dibujado con recursión en canvas: sube el nivel y mira cómo se divide.">
+    <meta name="theme-color" content="#07060b">
+    <title>Triángulo de Sierpinski · Computer Graphics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <title>Triángulo de Sierpinski</title>
+    <script src="triangulo.js"></script>
 </head>
 
 <body onload="main()">
-    <section>
-        <div>
-            <h1>Triángulo de Sierpinski</h1>
-            <div>
-                <label>Iteraciones: <span id="sliderValue">0</span></label>
-                <div class="slidecontainer">
-                    <input id="slider" type="range" min="0" max="8" value="0" step="1" class="slider">
+    <main class="page">
+        <header class="intro">
+            <p class="eyebrow">Computer Graphics · 2020</p>
+            <h1>Sierpinski</h1>
+            <p class="lead">
+                Triángulo de Sierpinski: un triángulo que se parte en tres triángulos, que se parten en tres
+                triángulos, que se parten en tres… Sube el nivel y míralo dividirse.
+            </p>
+        </header>
+
+        <div class="stage">
+            <div class="cabinet">
+                <div class="screen">
+                    <canvas id="trianC" width="500" height="500" aria-label="Triángulo de Sierpinski"></canvas>
                 </div>
             </div>
+
+            <aside class="panel" aria-label="Controles">
+                <div class="level">
+                    <label for="slider" class="level-label">Nivel</label>
+                    <output id="sliderValue" for="slider" class="level-value">0</output>
+                </div>
+
+                <div class="stepper">
+                    <button id="minus" type="button" aria-label="Bajar un nivel">−</button>
+                    <input id="slider" type="range" min="0" max="8" value="0" step="1" class="slider">
+                    <button id="plus" type="button" aria-label="Subir un nivel">+</button>
+                </div>
+
+                <button id="auto" type="button" class="auto" aria-pressed="false">▶ Auto</button>
+
+                <dl class="stats">
+                    <div>
+                        <dt>Triángulos</dt>
+                        <dd id="triangles">1</dd>
+                    </div>
+                    <div>
+                        <dt>Área que queda</dt>
+                        <dd id="area">100%</dd>
+                    </div>
+                </dl>
+
+                <p class="hint"><kbd>←</kbd><kbd>→</kbd> también cambian el nivel</p>
+            </aside>
         </div>
 
-        <canvas id="trianC" width="500" height="500"></canvas>
-    </section>
+        <section class="info" aria-label="Sobre el fractal">
+            <article class="card card-yellow">
+                <h2>El truco</h2>
+                <p>
+                    Une los puntos medios de los lados y te quedan tres triángulos en las esquinas y un hueco en
+                    medio. Repite lo mismo con cada uno. El código es una función que se llama a sí misma tres
+                    veces hasta llegar al nivel 0, y ahí pinta.
+                </p>
+            </article>
+
+            <article class="card card-cyan">
+                <h2>La cuenta</h2>
+                <p>
+                    Cada nivel triplica los triángulos (3<sup>n</sup>) y se queda con 3/4 del área. En el nivel 8
+                    ya son 6,561 triángulos y queda el 10% del área: si siguieras para siempre, el área sería 0.
+                </p>
+            </article>
+
+            <article class="card card-pink">
+                <h2>Hecho con</h2>
+                <p>
+                    JavaScript sin librerías sobre un &lt;canvas&gt; 2D: recursión, puntos medios y un
+                    <code>fill()</code> por triángulo con un color al azar de la paleta.
+                </p>
+            </article>
+        </section>
+
+        <footer class="links">
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/SierpinskiTriangle">Repo en GitHub</a>
+            <a href="https://antonymorsas.com/cosas">Otras cosas en antonymorsas.com</a>
+        </footer>
+    </main>
 </body>
 
 </html>
