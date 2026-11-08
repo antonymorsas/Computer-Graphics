@@ -1,3 +1,187 @@
-body{
-    font-family:Roboto,arial,helvetica;
+:root {
+    --bg: #0f0e13;
+    --fg: #f4f1ea;
+    --muted: #a39e94;
+    --line: rgba(255, 255, 255, 0.1);
+    --card: rgba(255, 255, 255, 0.03);
+    --accent: #a78bfa;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    color-scheme: dark;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+.page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 16px 64px;
+}
+
+.intro {
+    max-width: 640px;
+}
+
+.eyebrow {
+    margin: 0;
+    color: var(--accent);
+    font: 500 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+h1 {
+    margin: 8px 0 0;
+    font-size: clamp(40px, 8vw, 64px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.lead {
+    margin: 16px 0 0;
+    color: var(--muted);
+    font-size: 17px;
+}
+
+/* The canvas keeps its 900x500 drawing size and scales to the frame. */
+.frame {
+    margin-top: 32px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #000;
+    box-shadow: 0 24px 60px -30px rgba(139, 92, 246, 0.35);
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 9 / 5;
+    background: #000;
+}
+
+.touch-note {
+    display: none;
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .touch-note {
+        display: block;
+    }
+}
+
+.info {
+    display: grid;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+@media (min-width: 720px) {
+    .info {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.card {
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card);
+}
+
+.card h2 {
+    margin: 0 0 12px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.card p,
+.card ul,
+.card dl {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.card ul {
+    padding: 0;
+    list-style: none;
+}
+
+.card li + li {
+    margin-top: 8px;
+}
+
+.card strong {
+    color: var(--fg);
+    font-weight: 500;
+}
+
+.keys {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px 14px;
+    align-items: center;
+}
+
+.keys dt {
+    white-space: nowrap;
+}
+
+.keys dd {
+    margin: 0;
+}
+
+kbd {
+    display: inline-block;
+    min-width: 26px;
+    padding: 2px 7px;
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--fg);
+    font: 500 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-align: center;
+}
+
+code {
+    color: var(--fg);
+    font: 13px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: 32px;
+    font-size: 14px;
+}
+
+.links a {
+    color: var(--muted);
+    text-decoration: none;
+    text-underline-offset: 4px;
+}
+
+.links a:hover {
+    color: var(--fg);
+    text-decoration: underline;
 }

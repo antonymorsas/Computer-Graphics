@@ -72,8 +72,10 @@ function ballState(ball) {
 
 function menuEvents(menu){
     document.addEventListener("mousemove", event =>{
-        game.mousePos.x=event.clientX;
-        game.mousePos.y=event.clientY;
+        // Mouse position in canvas pixels, wherever the canvas is and however it's scaled.
+        let rect = canvas.getBoundingClientRect();
+        game.mousePos.x = (event.clientX - rect.left) * canvas.width / rect.width;
+        game.mousePos.y = (event.clientY - rect.top) * canvas.height / rect.height;
     });
 
     document.addEventListener("click", event =>{

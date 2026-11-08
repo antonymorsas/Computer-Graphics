@@ -176,7 +176,7 @@ class Sphere {
         }
         // Paddle colission
         if (onCollideBall(this, player) || onCollideBall(this, player2)) {
-            game.audioManager.src = "audio/hitpaddle.wav";
+            game.audioManager.src = "audio/hitPaddle.wav";
             game.audioManager.volume = 0.2;
             game.audioManager.play();
 

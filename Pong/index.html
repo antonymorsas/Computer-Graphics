@@ -1,24 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pong en canvas 2D: contra la computadora, contra otra persona en el mismo teclado, o dos bots.">
+    <meta name="theme-color" content="#0f0e13">
+    <title>Pong · Computer Graphics</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="input.js"></script>
     <script src="helpers.js"></script>
     <script src="pong-game.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <title>Pong Game</title>
 </head>
 
 <body onload="main()">
-    <section>
-        <div class="canvasContainer">
-            <canvas id="ballCanvas" width="900" height="500" style="background-color: black;">
-                Your browser does not support the canvas element
+    <main class="page">
+        <header class="intro">
+            <p class="eyebrow">Computer Graphics · 2020</p>
+            <h1>Pong</h1>
+            <p class="lead">
+                El clásico en canvas 2D: juega contra la computadora, contra otra persona en el mismo teclado,
+                o mira a dos bots jugar entre ellos.
+            </p>
+        </header>
+
+        <div class="frame">
+            <canvas id="ballCanvas" width="900" height="500" aria-label="Pong: elige un modo con el mouse">
+                Tu navegador no soporta canvas.
             </canvas>
         </div>
-    </section>
+        <p class="touch-note">Se juega con teclado: ábrelo en una computadora.</p>
+
+        <section class="info" aria-label="Cómo se juega">
+            <article class="card">
+                <h2>Modos</h2>
+                <ul>
+                    <li><strong>Player vs NPC</strong> · tú contra la computadora.</li>
+                    <li><strong>Player vs Player</strong> · dos personas, un teclado.</li>
+                    <li><strong>NPC vs NPC</strong> · dos bots; la partida empieza sola.</li>
+                </ul>
+            </article>
+
+            <article class="card">
+                <h2>Controles</h2>
+                <dl class="keys">
+                    <dt><kbd>W</kbd> <kbd>S</kbd></dt>
+                    <dd>Jugador 1 (izquierda)</dd>
+                    <dt><kbd>↑</kbd> <kbd>↓</kbd></dt>
+                    <dd>Jugador 2 (derecha)</dd>
+                    <dt><kbd>Espacio</kbd></dt>
+                    <dd>Sacar</dd>
+                </dl>
+            </article>
+
+            <article class="card">
+                <h2>Cómo está hecho</h2>
+                <p>
+                    JavaScript sin librerías sobre un <code>&lt;canvas&gt;</code>: un loop con
+                    <code>requestAnimationFrame</code>, colisiones de la pelota que deciden el rebote según la
+                    pendiente de su trayectoria, y bots que siguen la pelota.
+                </p>
+            </article>
+        </section>
+
+        <footer class="links">
+            <a href="https://github.com/antonymorsas/Computer-Graphics/tree/master/Pong">Código en GitHub ↗</a>
+            <a href="https://antonymorsas.com/cosas">Más cosas en antonymorsas.com ↗</a>
+        </footer>
+    </main>
+
+    <script>
+        // Space and the arrows play the game; keep them from scrolling the page.
+        document.addEventListener("keydown", function (event) {
+            if ([" ", "ArrowUp", "ArrowDown"].indexOf(event.key) !== -1) event.preventDefault();
+        });
+    </script>
 </body>
 
 </html>
